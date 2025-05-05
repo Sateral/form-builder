@@ -1,0 +1,27 @@
+p.is-editor-empty:first-child::before {
+  color: #6e6e6e;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s;
+}
+
+.ProseMirror-focused p.is-editor-empty:first-child::before {
+  opacity: 1;
+}
+
+/* Bubble menu */
+.is-active {
+  @apply bg-gray-900;
+  @apply text-white;
+}
+
+.is-active:hover {
+  @apply bg-gray-700;
+}
+
+.prose {
+  @apply text-lg;
+}
