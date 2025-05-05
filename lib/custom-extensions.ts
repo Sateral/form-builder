@@ -2,6 +2,7 @@ import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { useFormBuilder } from '@/lib/store/form-builder-store';
 import { isAtStart, isAtEnd, navigateToField } from '@/utils/keyboardHelpers';
+import { navigateFormFields } from '@/utils/formNavigation';
 
 export const CustomKeyboardExtension = Extension.create({
   name: 'customKeyboard',
@@ -24,92 +25,49 @@ export const CustomKeyboardExtension = Extension.create({
               fields,
             } = useFormBuilder.getState();
 
-            // const {addField, removeField, setSelectedField } = useFormBuilder()
+            // Handle Enter Key
+            if (event.key === 'Enter' && !event.shiftKey) {
+              event.preventDefault();
+              addField({
+                type: 'text',
+                label: 'New Field',
+                required: false,
+                placeholder: 'Type something...',
+              });
+              return true;
+            }
 
-            const currentField = fields.find((f) => f.id === fieldId);
-            if (!currentField) return false;
+            // Handle Backspace Key
+            if (event.key === 'Backspace' && !view.state.doc.textContent) {
+              event.preventDefault();
 
-            const selectedSubFieldIndex = currentField.subFields?.findIndex(
-              (sf) => sf.subId === selectedSubFieldId
-            );
+              // Find current field index
+              const fieldIndex = fields.findIndex((f) => f.id === fieldId);
+              if (fieldIndex > 0) {
+                setSelectedField(fields[fieldIndex - 1].id, null);
+              }
 
-            switch (event.key) {
-              case 'Enter':
-                if (!event.shiftKey) {
-                  event.preventDefault();
-                  addField({
-                    type: 'text',
-                    label: 'New Field',
-                    required: false,
-                    placeholder: 'Type something',
-                  });
-                  return true;
-                }
-                break;
+              removeField(fieldId);
+              return true;
+            }
 
-              case 'Backspace':
-                if (!view.state.doc.textContent) {
-                  event.preventDefault();
-                  navigateToField(fieldId, 'previous');
-                  removeField(fieldId);
-                  return true;
-                }
-                break;
+            // Handle Arrow Keys
+            if (event.key === 'ArrowUp') {
+              return navigateFormFields(
+                view,
+                'up',
+                fieldId,
+                selectedSubFieldId
+              );
+            }
 
-              case 'ArrowUp':
-                if (
-                  currentField.subFields &&
-                  selectedSubFieldId !== null &&
-                  selectedSubFieldIndex &&
-                  selectedSubFieldIndex > 0
-                ) {
-                  event.preventDefault();
-                  setSelectedField(
-                    fieldId,
-                    currentField.subFields[selectedSubFieldIndex - 1].subId
-                  );
-                  return true;
-                } else if (
-                  currentField.subFields &&
-                  selectedSubFieldIndex === 0
-                ) {
-                  event.preventDefault();
-                  setSelectedField(fieldId, null);
-                  return true;
-                } else if (isAtStart(view)) {
-                  event.preventDefault();
-                  navigateToField(fieldId, 'previous');
-                  return true;
-                }
-                break;
-
-              case 'ArrowDown':
-                if (currentField.subFields && selectedSubFieldIndex === -1) {
-                  setSelectedField(fieldId, currentField.subFields[0].subId);
-                  return true;
-                } else if (
-                  currentField.subFields &&
-                  selectedSubFieldIndex !== null &&
-                  selectedSubFieldIndex &&
-                  selectedSubFieldIndex < currentField.subFields.length - 1
-                ) {
-                  event.preventDefault();
-
-                  setSelectedField(
-                    fieldId,
-                    currentField.subFields[selectedSubFieldIndex + 1].subId
-                  );
-                  return true;
-                } else if (isAtEnd(view)) {
-                  event.preventDefault();
-
-                  navigateToField(fieldId, 'next');
-                  return true;
-                }
-                break;
-
-              default:
-                break;
+            if (event.key === 'ArrowDown') {
+              return navigateFormFields(
+                view,
+                'down',
+                fieldId,
+                selectedSubFieldId
+              );
             }
 
             return false;
