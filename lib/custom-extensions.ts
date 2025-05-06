@@ -1,7 +1,6 @@
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from 'prosemirror-state';
 import { useFormBuilder } from '@/lib/store/form-builder-store';
-import { isAtStart, isAtEnd, navigateToField } from '@/utils/keyboardHelpers';
 import { navigateFormFields } from '@/utils/formNavigation';
 
 export const CustomKeyboardExtension = Extension.create({
@@ -9,7 +8,6 @@ export const CustomKeyboardExtension = Extension.create({
 
   addProseMirrorPlugins() {
     const fieldId = this.options.fieldId;
-    const subFieldId = this.options.subFieldId;
 
     return [
       new Plugin({

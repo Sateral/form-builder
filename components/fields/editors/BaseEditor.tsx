@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react';
 
 import '@/app/editor.css';
-import { getEditorConfig } from '@/utils/editorConfig';
 import { FormFieldTypes } from '@/lib/types';
-import { useEditorState } from '@/hooks/useEditorState';
 import { Toggle } from '@/components/ui/toggle';
+import { getEditorConfig } from '@/utils/editorConfig';
+import { useEditorState } from '@/hooks/useEditorState';
 
 export interface BaseEditorProps {
   // Common props
@@ -19,7 +19,6 @@ export interface BaseEditorProps {
   // Field-specific props
   placeholder?: string;
   subFieldId?: string;
-  parentFieldId?: string;
   type?: FormFieldTypes | 'label' | 'input' | 'choice';
   showToolbar?: boolean;
 }
@@ -29,23 +28,19 @@ const BaseEditor = React.memo(
     content,
     fieldId,
     subFieldId,
-    parentFieldId,
     placeholder,
     type = 'text',
     onUpdate,
     onClick,
     showToolbar = false,
   }: BaseEditorProps) => {
-    // Use the actual field ID based on context
-    const actualFieldId = parentFieldId || fieldId;
-
     // Select appropriate state based on whether this is a subfield
-    const { isSelected } = useEditorState(actualFieldId, subFieldId);
+    const { isSelected } = useEditorState(fieldId, subFieldId);
 
     // Get the proper config based on field type
     const editorConfig = getEditorConfig({
       placeholder,
-      fieldId: actualFieldId,
+      fieldId,
       subFieldId,
     });
 
@@ -58,7 +53,9 @@ const BaseEditor = React.memo(
           // Add specific attributes based on type
           class: `prose prose-sm focus:outline-none ${
             subFieldId ? 'bg-white p-2 shadow-md rounded-lg text-nowrap' : ''
-          } ${type === 'email' ? 'email-editor' : ''}`,
+          } ${type === 'email' ? 'email-editor' : ''} ${
+            type === 'text' ? 'text-editor' : ''
+          }`,
         },
       }),
       [editorConfig, subFieldId, type]
@@ -73,7 +70,7 @@ const BaseEditor = React.memo(
           onUpdate(editor.getHTML());
         },
       },
-      [actualFieldId, subFieldId]
+      [fieldId, subFieldId]
     );
 
     // Focus management logic

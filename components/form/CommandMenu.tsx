@@ -38,12 +38,15 @@ const CommandMenu = () => {
           ],
         });
         break;
+
       case 'text':
         addField({
           label: 'Text',
           required: true,
           type: 'text',
         });
+        break;
+
       case 'multipleChoice':
         addField({
           label: 'Multiple Choice',
@@ -64,6 +67,8 @@ const CommandMenu = () => {
             },
           ],
         });
+        break;
+
       default:
         break;
     }

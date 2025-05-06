@@ -15,7 +15,7 @@ interface SubEditorProps {
 }
 
 const SubEditor = React.memo((props: SubEditorProps) => {
-  return <BaseEditor fieldId={props.subFieldId} {...props} />;
+  return <BaseEditor fieldId={props.parentFieldId} {...props} />;
 });
 
 export default SubEditor;

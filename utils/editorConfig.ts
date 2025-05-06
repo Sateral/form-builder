@@ -1,8 +1,5 @@
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { handleKeyDown } from './keyHandlers';
-import { EditorView } from '@tiptap/pm/view';
-import { FormFieldTypes } from '@/lib/types';
 import { CustomKeyboardExtension } from '@/lib/custom-extensions';
 
 interface EditorConfigProps {

@@ -4,10 +4,16 @@ p.is-editor-empty:first-child::before {
   float: left;
   height: 0;
   pointer-events: none;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.2s;
 }
 
+/* Hide placeholder only for text fields that aren't focused */
+.text-editor p.is-editor-empty:first-child::before {
+  opacity: 0;
+}
+
+/* Always show placeholder when focused (for all types) */
 .ProseMirror-focused p.is-editor-empty:first-child::before {
   opacity: 1;
 }

@@ -2,7 +2,6 @@ import React from 'react';
 import { FormField } from '@/lib/types';
 import { useFormBuilder } from '@/lib/store/form-builder-store';
 import TextEditor from './editors/TextEditor';
-import Editor from './editors/old/Editor';
 
 interface TextFieldProps {
   field: FormField;
