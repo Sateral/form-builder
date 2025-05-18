@@ -13,8 +13,9 @@ export interface BaseEditorProps {
   // Common props
   content?: string;
   fieldId: string;
-  onUpdate: (content: string) => void;
+  onUpdate?: (content: string) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  readOnly?: boolean;
 
   // Field-specific props
   placeholder?: string;
@@ -32,6 +33,7 @@ const BaseEditor = React.memo(
     type = "text",
     onUpdate,
     onClick,
+    readOnly = false,
     showToolbar = false,
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
@@ -66,8 +68,11 @@ const BaseEditor = React.memo(
         ...editorConfig,
         content,
         editorProps,
+        editable: !readOnly,
         onUpdate: ({ editor }) => {
-          onUpdate(editor.getHTML());
+          if (onUpdate) {
+            onUpdate(editor.getHTML());
+          }
         },
       },
       [fieldId, subFieldId]

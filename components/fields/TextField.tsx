@@ -3,7 +3,7 @@ import { FormField } from "@/lib/types";
 import { useFormBuilder } from "@/lib/store/form-builder-store";
 import TextEditor from "./editors/TextEditor";
 import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import BaseEditor from "./editors/BaseEditor";
 
 interface TextFieldProps {
   field: FormField;
@@ -20,21 +20,7 @@ const TextField = React.memo(({ field }: TextFieldProps) => {
   if (isPreview) {
     return (
       <div className="mb-4">
-        <Label htmlFor={field.id} className="block mb-2 font-medium">
-          {field.label}
-          {field.required && <span className="text-red-500 ml-1">*</span>}
-        </Label>
-        <Input
-          id={field.id}
-          placeholder={field.placeholder || ""}
-          value={previewValue}
-          onChange={(e) => setPreviewValue(e.target.value)}
-          required={field.required}
-          className="w-full"
-        />
-        {field.placeholder && (
-          <p className="mt-1 text-sm text-gray-500">{field.placeholder}</p>
-        )}
+        <BaseEditor fieldId={field.id} content={field.content} readOnly />
       </div>
     );
   }
