@@ -1,16 +1,17 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { FormField } from '@/lib/types';
+import { create } from "zustand";
+import { FormField } from "@/lib/types";
 
 interface FormBuilderState {
   fields: FormField[];
   selectedField: string | null;
   selectedSubFieldId: string | null;
-  addField: (field: Omit<FormField, 'id'>) => void;
+  isPreview: boolean;
+  addField: (field: Omit<FormField, "id">) => void;
   updateField: (id: string, updates: Partial<FormField>) => void;
   setSelectedField: (id: string | null, subFieldId?: string | null) => void;
   setFields: (fields: FormField[]) => void;
   removeField: (id: string) => void;
+  togglePreview: () => void;
 }
 
 export const useFormBuilder = create<FormBuilderState>()(
@@ -18,32 +19,27 @@ export const useFormBuilder = create<FormBuilderState>()(
   (set, get) => ({
     fields: [
       {
-        id: '1',
-        type: 'text',
-        label: 'Full Name',
+        id: "1",
+        type: "text",
+        label: "Full Name",
         required: true,
-        placeholder: 'Type something',
-        content: '',
-      },
-      {
-        id: '2',
-        type: 'email',
-        label: 'Email',
-        required: true,
-        subFields: [{ subId: '1', parentFieldId: '2', type: 'input' }],
+        placeholder: "Type something",
+        content: "",
       },
     ],
 
-    selectedField: '1',
+    selectedField: "1",
 
     selectedSubFieldId: null,
+
+    isPreview: false,
 
     addField: (field) => {
       const newId = crypto.randomUUID();
       const newField: FormField = {
         ...field,
         id: newId,
-        content: '',
+        content: "",
         subFields: field.subFields
           ? field.subFields.map((subField) => ({
               ...subField,
@@ -95,10 +91,10 @@ export const useFormBuilder = create<FormBuilderState>()(
         if (newFields.length === 0) {
           const defaultField: FormField = {
             id: crypto.randomUUID(),
-            type: 'text',
-            label: 'New Field',
+            type: "text",
+            label: "New Field",
             required: false,
-            content: '',
+            content: "",
           };
           newFields.push(defaultField);
           return {
@@ -113,6 +109,10 @@ export const useFormBuilder = create<FormBuilderState>()(
         }
         return { fields: newFields };
       });
+    },
+
+    togglePreview: () => {
+      set((state) => ({ isPreview: !state.isPreview }));
     },
   })
   // { name: 'form-builder-storage' }

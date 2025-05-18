@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect } from 'react';
-import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react';
+import React, { useCallback, useEffect } from "react";
+import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
-import '@/app/editor.css';
-import { FormFieldTypes } from '@/lib/types';
-import { Toggle } from '@/components/ui/toggle';
-import { getEditorConfig } from '@/utils/editorConfig';
-import { useEditorState } from '@/hooks/useEditorState';
+import "@/app/editor.css";
+import { FormFieldTypes } from "@/lib/types";
+import { Toggle } from "@/components/ui/toggle";
+import { getEditorConfig } from "@/utils/editorConfig";
+import { useEditorState } from "@/hooks/useEditorState";
 
 export interface BaseEditorProps {
   // Common props
@@ -19,7 +19,7 @@ export interface BaseEditorProps {
   // Field-specific props
   placeholder?: string;
   subFieldId?: string;
-  type?: FormFieldTypes | 'label' | 'input' | 'choice';
+  type?: FormFieldTypes | "label" | "input" | "choice";
   showToolbar?: boolean;
 }
 
@@ -29,7 +29,7 @@ const BaseEditor = React.memo(
     fieldId,
     subFieldId,
     placeholder,
-    type = 'text',
+    type = "text",
     onUpdate,
     onClick,
     showToolbar = false,
@@ -52,9 +52,9 @@ const BaseEditor = React.memo(
           ...editorConfig.editorProps?.attributes,
           // Add specific attributes based on type
           class: `prose prose-sm focus:outline-none ${
-            subFieldId ? 'bg-white p-2 shadow-md rounded-lg text-nowrap' : ''
-          } ${type === 'email' ? 'email-editor' : ''} ${
-            type === 'text' ? 'text-editor' : ''
+            subFieldId ? "bg-white p-2 shadow-md rounded-lg text-nowrap" : ""
+          } ${type === "email" ? "email-editor" : ""} ${
+            type === "text" ? "text-editor" : ""
           }`,
         },
       }),
@@ -93,22 +93,24 @@ const BaseEditor = React.memo(
 
         {/* Only show toolbar for text fields when enabled */}
         {editor && showToolbar && (
-          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-            <div className="flex flex-row bg-white p-2 shadow-lg rounded-lg gap-x-1">
-              <Toggle
-                onClick={() => editor.chain().focus().toggleBold().run()}
-                className="p-2 rounded-lg transition"
-              >
-                Bold
-              </Toggle>
-              <Toggle
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-                className="p-2 rounded-lg transition"
-              >
-                Italic
-              </Toggle>
-            </div>
-          </BubbleMenu>
+          <div>
+            <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+              <div className="flex flex-row bg-white p-2 shadow-lg rounded-lg gap-x-1">
+                <Toggle
+                  onClick={() => editor.chain().focus().toggleBold().run()}
+                  className="p-2 rounded-lg transition"
+                >
+                  Bold
+                </Toggle>
+                <Toggle
+                  onClick={() => editor.chain().focus().toggleItalic().run()}
+                  className="p-2 rounded-lg transition"
+                >
+                  Italic
+                </Toggle>
+              </div>
+            </BubbleMenu>
+          </div>
         )}
       </>
     );

@@ -1,53 +1,67 @@
-'use client';
+"use client";
 
-import React, { MouseEventHandler } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import React from "react";
 
-import DnDProvider from '@/providers/DnDProvider';
-import TextField from '@/components/fields/TextField';
-import EmailField from '@/components/fields/EmailField';
-import DraggableField from '@/components/form/DraggableField';
-import { useFormBuilder } from '@/lib/store/form-builder-store';
-import MultipleChoiceField from '@/components/fields/MultipleChoiceField';
+import DnDProvider from "@/providers/DnDProvider";
+import TextField from "@/components/fields/TextField";
+import EmailField from "@/components/fields/EmailField";
+import DraggableField from "@/components/form/DraggableField";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
+import MultipleChoiceField from "@/components/fields/MultipleChoiceField";
+import { EyeIcon, PencilIcon } from "lucide-react";
+import { Button } from "../ui/button";
 
 interface Props {}
 
 const FormEditor = ({}: Props) => {
-  const { fields, setSelectedField } = useFormBuilder();
+  const fields = useFormBuilder((state) => state.fields);
+  const { setSelectedField, togglePreview, isPreview } = useFormBuilder();
 
   const handleContainerClick = () => {
     setSelectedField(null, null);
   };
 
   return (
-    <DnDProvider>
-      <div
-        className="flex flex-col gap-4 h-full"
-        onClick={handleContainerClick}
-      >
-        {fields.map((field) => (
-          <DraggableField key={field.id} id={field.id}>
-            {(() => {
-              switch (field.type) {
-                case 'text':
-                  return <TextField field={field} />;
-                case 'email':
-                  return <EmailField field={field} />;
-                case 'multipleChoice':
-                  return <MultipleChoiceField field={field} />;
-                default:
-                  return null;
-              }
-            })()}
-          </DraggableField>
-        ))}
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b flex justify-end">
+        <Button onClick={togglePreview} variant="outline" size="sm">
+          {isPreview ? (
+            <>
+              <PencilIcon className="mr-2 h-4 w-4" /> Edit Mode
+            </>
+          ) : (
+            <>
+              <EyeIcon className="mr-2 h-4 w-4" /> Preview Mode
+            </>
+          )}
+        </Button>
       </div>
-    </DnDProvider>
+      <div className="flex-grow p-4 overflow-y-auto">
+        <DnDProvider>
+          <div
+            className="flex flex-col gap-4 h-full"
+            onClick={handleContainerClick}
+          >
+            {fields.map((field) => (
+              <DraggableField key={field.id} id={field.id}>
+                {(() => {
+                  switch (field.type) {
+                    case "text":
+                      return <TextField field={field} />;
+                    case "email":
+                      return <EmailField field={field} />;
+                    case "multipleChoice":
+                      return <MultipleChoiceField field={field} />;
+                    default:
+                      return null;
+                  }
+                })()}
+              </DraggableField>
+            ))}
+          </div>
+        </DnDProvider>
+      </div>
+    </div>
   );
 };
 
