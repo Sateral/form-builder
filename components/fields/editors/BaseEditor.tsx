@@ -5,10 +5,10 @@ import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
 import "@/app/editor.css";
 import { FormFieldTypes } from "@/lib/types";
-import { Toggle } from "@/components/ui/toggle";
 import { getEditorConfig } from "@/utils/editorConfig";
 import { useEditorState } from "@/hooks/useEditorState";
 import { useFormBuilder } from "@/lib/store/form-builder-store";
+import EditorToolbar from "@/components/ui/EditorToolbar";
 
 export interface BaseEditorProps {
   // Common props
@@ -100,24 +100,9 @@ const BaseEditor = React.memo(
 
         {/* Only show toolbar for text fields when enabled */}
         {editor && showToolbar && (
-          <div>
-            <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
-              <div className="flex flex-row bg-white p-2 shadow-lg rounded-lg gap-x-1">
-                <Toggle
-                  onClick={() => editor.chain().focus().toggleBold().run()}
-                  className="p-2 rounded-lg transition"
-                >
-                  Bold
-                </Toggle>
-                <Toggle
-                  onClick={() => editor.chain().focus().toggleItalic().run()}
-                  className="p-2 rounded-lg transition"
-                >
-                  Italic
-                </Toggle>
-              </div>
-            </BubbleMenu>
-          </div>
+          <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
+            <EditorToolbar editor={editor} />
+          </BubbleMenu>
         )}
       </>
     );
