@@ -25,7 +25,14 @@ const FormEditor = ({}: Props) => {
   return (
     <div className="flex flex-col h-full">
       <div className="p-4 border-b flex justify-end">
-        <Button onClick={togglePreview} variant="outline" size="sm">
+        <Button
+          onClick={() => {
+            togglePreview();
+            handleContainerClick();
+          }}
+          variant="outline"
+          size="sm"
+        >
           {isPreview ? (
             <>
               <PencilIcon className="mr-2 h-4 w-4" /> Edit Mode

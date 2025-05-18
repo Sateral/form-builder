@@ -8,6 +8,7 @@ import { FormFieldTypes } from "@/lib/types";
 import { Toggle } from "@/components/ui/toggle";
 import { getEditorConfig } from "@/utils/editorConfig";
 import { useEditorState } from "@/hooks/useEditorState";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
 
 export interface BaseEditorProps {
   // Common props
@@ -38,6 +39,7 @@ const BaseEditor = React.memo(
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
     const { isSelected } = useEditorState(fieldId, subFieldId);
+    const { isPreview } = useFormBuilder();
 
     // Get the proper config based on field type
     const editorConfig = getEditorConfig({
