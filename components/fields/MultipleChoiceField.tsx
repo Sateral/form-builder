@@ -14,6 +14,7 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import OPTION_LABELS from "@/lib/constants/MultipleChoiceOptions";
 import PreviewMode from "./MC Field/MCPreview";
 import OptionElement from "./MC Field/OptionElement";
+import LabelEditor from "./editors/LabelEditor";
 
 interface MultipleChoiceFieldProps {
   field: MCFieldType;
@@ -163,14 +164,14 @@ const MultipleChoiceField = React.memo(
     return (
       <div className="w-full">
         {/* Label editor */}
-        <div className="mb-4">
-          <BaseEditor
+        <div className="flex flex-row items-center gap-2 mb-4">
+          <LabelEditor
             fieldId={field.id}
             onUpdate={handleLabelUpdate}
             content={field.label}
-            placeholder="Enter question"
             onClick={() => {}}
           />
+          {field.required && <span className="text-rose-500">*</span>}
         </div>
 
         {/* Options */}

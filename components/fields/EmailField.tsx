@@ -53,13 +53,14 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
   return (
     <div className="w-full">
       {/* Label area rendered by TipTap */}
-      <div className="mb-2">
+      <div className="flex flex-row items-center gap-2 mb-2">
         <LabelEditor
           fieldId={field.id}
           onUpdate={handleUpdateMain}
           content={field.label}
           onClick={(e) => handleMainClick(e)}
         />
+        {field.required && <span className="text-rose-500">*</span>}
       </div>
       {/* Render the input field */}
       <div>

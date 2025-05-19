@@ -11,7 +11,7 @@ const FormRender = () => {
   const fields = useFormBuilder((state) => state.fields);
 
   return (
-    <div>
+    <div className="flex flex-col space-y-4">
       {fields.map((field) => {
         switch (field.type) {
           case "text":

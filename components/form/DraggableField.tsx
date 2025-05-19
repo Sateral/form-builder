@@ -41,7 +41,7 @@ const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
       style={style}
       {...attributes}
       className={`w-full p-2 group transition-colors duration-300 rounded-md ${className} ${
-        isDragging ? "bg-gray-700/10" : ""
+        isDragging ? "bg-gray-700/10 z-50" : ""
       }`}
       onClick={handleClick}
     >

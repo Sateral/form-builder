@@ -23,7 +23,7 @@ const FormEditor = ({}: Props) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full font-medium">
       <div className="p-4 border-b flex justify-end">
         <Button
           onClick={() => {
@@ -50,23 +50,25 @@ const FormEditor = ({}: Props) => {
         ) : (
           <DnDProvider>
             <div
-              className="flex flex-col gap-4 h-full"
+              className="flex flex-col  h-full"
               onClick={handleContainerClick}
             >
               {fields.map((field) => (
                 <DraggableField key={field.id} id={field.id}>
-                  {(() => {
-                    switch (field.type) {
-                      case "text":
-                        return <TextField field={field} />;
-                      case "email":
-                        return <EmailField field={field} />;
-                      case "multipleChoice":
-                        return <MultipleChoiceField field={field} />;
-                      default:
-                        return null;
-                    }
-                  })()}
+                  <div className="flex flex-row items-center gap-2">
+                    {(() => {
+                      switch (field.type) {
+                        case "text":
+                          return <TextField field={field} />;
+                        case "email":
+                          return <EmailField field={field} />;
+                        case "multipleChoice":
+                          return <MultipleChoiceField field={field} />;
+                        default:
+                          return null;
+                      }
+                    })()}
+                  </div>
                 </DraggableField>
               ))}
             </div>

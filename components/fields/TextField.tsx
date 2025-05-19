@@ -14,26 +14,27 @@ const TextField = React.memo(({ field }: TextFieldProps) => {
   const [previewValue, setPreviewValue] = useState("");
 
   const handleUpdate = (content: string) => {
-    updateField(field.id, { content });
+    updateField(field.id, { label: content });
   };
 
   if (isPreview) {
     return (
-      <div className="mb-4">
-        <BaseEditor fieldId={field.id} content={field.content} readOnly />
+      <div className="">
+        <BaseEditor fieldId={field.id} content={field.label} readOnly />
       </div>
     );
   }
 
   // Editor mode (original code)
   return (
-    <div className="w-full">
+    <div className="flex flex-row items-center gap-2">
       <TextEditor
         fieldId={field.id}
         onUpdate={handleUpdate}
-        content={field.content}
+        content={field.label}
         placeholder={field.placeholder}
       />
+      {field.required && <span className="text-rose-500">*</span>}
     </div>
   );
 });

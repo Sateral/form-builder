@@ -24,13 +24,12 @@ const PreviewMode = React.memo(({ field }: MultipleChoiceFieldProps) => {
         readOnly
         placeholder="Enter question"
       />
-      <ToggleGroup type="single" className="mt-2 flex flex-col space-y-2">
+      <ToggleGroup
+        type="single"
+        className="mt-2 flex flex-col items-start space-y-2"
+      >
         {(mcField.subFields || []).map((item) => (
-          <ToggleGroupItem
-            key={item.subId}
-            value={item.subId}
-            className="flex items-center gap-2 border rounded-md px-3 py-2 data-[state=on]:border-primary"
-          >
+          <ToggleGroupItem key={item.subId} value={item.subId}>
             <div
               className="flex justify-center items-center font-semibold size-6 text-md shrink-0 rounded-md"
               style={{
