@@ -92,8 +92,8 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
           ...(fieldData as Partial<MultipleChoiceField>),
           type: "multipleChoice",
           subFields: [
-            createDefaultMCSubField(newId, "A", "#FF1744"),
-            createDefaultMCSubField(newId, "B", "#E91E63"),
+            createDefaultMCSubField(newId, "A", "#FF69B4"),
+            createDefaultMCSubField(newId, "B", "#00CED1"),
           ],
         };
         break;
