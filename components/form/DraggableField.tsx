@@ -32,7 +32,7 @@ const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedField(id, null);
+    // setSelectedField(id, null);
   };
 
   return (
@@ -40,8 +40,8 @@ const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className={`w-full p-2 group transition-colors duration-300 hover:bg-gray-700/10 ${className} ${
-        isDragging ? "bg-gray-700/10 rounded-md" : ""
+      className={`w-full p-2 group transition-colors duration-300 rounded-md ${className} ${
+        isDragging ? "bg-gray-700/10" : ""
       }`}
       onClick={handleClick}
     >

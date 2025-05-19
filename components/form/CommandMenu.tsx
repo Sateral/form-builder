@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import {
   CommandDialog,
@@ -9,61 +9,67 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
-import { useCommandMenu } from '@/lib/store/command-menu-store';
-import { CommandMenuItems } from '@/lib/constants/CommandMenuItems';
-import { FormFieldTypes } from '@/lib/types';
-import { useFormBuilder } from '@/lib/store/form-builder-store';
-import { DialogTitle } from '../ui/dialog';
+} from "@/components/ui/command";
+import { useCommandMenu } from "@/lib/store/command-menu-store";
+import { CommandMenuItems } from "@/lib/constants/CommandMenuItems";
+import { FormFieldTypes } from "@/lib/types";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { DialogTitle } from "../ui/dialog";
 
 const CommandMenu = () => {
   const { isOpen, onClose } = useCommandMenu();
   const { addField } = useFormBuilder();
 
   const handleClick = (type: FormFieldTypes) => {
-    console.log('Adding field:', type);
+    console.log("Adding field:", type);
     const newId = crypto.randomUUID();
     switch (type) {
-      case 'email':
+      case "email":
         addField({
-          label: 'Email',
+          id: newId,
+          label: "",
           required: true,
-          type: 'email',
+          type: "email",
+          subField: {
+            parentFieldId: newId,
+            subId: crypto.randomUUID(),
+            type: "input",
+            content: "",
+          },
+        });
+        break;
+
+      case "text":
+        addField({
+          id: newId,
+          label: "Text",
+          required: true,
+          type: "text",
+        });
+        break;
+
+      case "multipleChoice":
+        addField({
+          id: newId,
+          label: "",
+          required: false,
+          type: "multipleChoice",
           subFields: [
             {
               parentFieldId: newId,
               subId: crypto.randomUUID(),
-              type: 'input',
-            },
-          ],
-        });
-        break;
-
-      case 'text':
-        addField({
-          label: 'Text',
-          required: true,
-          type: 'text',
-        });
-        break;
-
-      case 'multipleChoice':
-        addField({
-          label: 'Multiple Choice',
-          required: true,
-          type: 'multipleChoice',
-          subFields: [
-            {
-              parentFieldId: newId,
-              subId: crypto.randomUUID(),
-              type: 'choice',
-              label: 'A)',
+              type: "choice",
+              content: "",
+              label: "A",
+              colour: "#FF1744",
             },
             {
               parentFieldId: newId,
               subId: crypto.randomUUID(),
-              type: 'choice',
-              label: 'B)',
+              type: "choice",
+              content: "",
+              label: "B",
+              colour: "#E91E63",
             },
           ],
         });

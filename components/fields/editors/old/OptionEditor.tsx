@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import BaseEditor, { BaseEditorProps } from './BaseEditor';
+import React from "react";
+import BaseEditor, { BaseEditorProps } from "../BaseEditor";
 
 interface OptionEditorProps {
   fieldId: string;
@@ -15,7 +15,7 @@ const OptionEditor = React.memo((props: OptionEditorProps) => {
   return (
     <BaseEditor
       {...props}
-      type="choice"
+      type="label"
       subFieldId={props.fieldId}
       showToolbar
     />

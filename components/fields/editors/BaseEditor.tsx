@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 
 import "@/app/editor.css";
-import { FormFieldTypes } from "@/lib/types";
 import { getEditorConfig } from "@/utils/editorConfig";
 import { useEditorState } from "@/hooks/useEditorState";
 import { useFormBuilder } from "@/lib/store/form-builder-store";
@@ -20,8 +19,7 @@ export interface BaseEditorProps {
 
   // Field-specific props
   placeholder?: string;
-  subFieldId?: string;
-  type?: FormFieldTypes | "label" | "input" | "choice";
+  type?: "text" | "label";
   showToolbar?: boolean;
 }
 
@@ -29,7 +27,6 @@ const BaseEditor = React.memo(
   ({
     content,
     fieldId,
-    subFieldId,
     placeholder,
     type = "text",
     onUpdate,
@@ -38,14 +35,13 @@ const BaseEditor = React.memo(
     showToolbar = false,
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
-    const { isSelected } = useEditorState(fieldId, subFieldId);
+    const { isSelected } = useEditorState(fieldId);
     const { isPreview } = useFormBuilder();
 
     // Get the proper config based on field type
     const editorConfig = getEditorConfig({
       placeholder,
       fieldId,
-      subFieldId,
     });
 
     // Customize editor props based on type
@@ -56,13 +52,11 @@ const BaseEditor = React.memo(
           ...editorConfig.editorProps?.attributes,
           // Add specific attributes based on type
           class: `prose prose-sm focus:outline-none ${
-            subFieldId ? "bg-white p-2 shadow-md rounded-lg text-nowrap" : ""
-          } ${type === "email" ? "email-editor" : ""} ${
             type === "text" ? "text-editor" : ""
           }`,
         },
       }),
-      [editorConfig, subFieldId, type]
+      [editorConfig, type]
     );
 
     const editor = useEditor(
@@ -77,7 +71,7 @@ const BaseEditor = React.memo(
           }
         },
       },
-      [fieldId, subFieldId]
+      [fieldId]
     );
 
     // Focus management logic

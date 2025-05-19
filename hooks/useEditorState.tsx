@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { useFormBuilder } from '@/lib/store/form-builder-store';
-import { shallow, useShallow } from 'zustand/shallow';
+import { useCallback, useMemo } from "react";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { shallow, useShallow } from "zustand/shallow";
 
 export function useEditorState(fieldId: string, subFieldId?: string) {
   // Create a stable selector that doesn't change between renders.

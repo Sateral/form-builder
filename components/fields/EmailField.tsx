@@ -1,35 +1,26 @@
 import React from "react";
 
-import { FormField } from "@/lib/types";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
-import EmailEditor from "@/components/fields/editors/EmailEditor";
-import SubEditor from "@/components/fields/editors/SubEditor";
-import BaseEditor from "./editors/BaseEditor";
 import { Input } from "../ui/input";
-import { htmlToPlain } from "@/lib/htmlToPlain";
+import BaseEditor from "./editors/BaseEditor";
+import { EmailField as EmailFieldType } from "@/lib/types";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
+import LabelEditor from "@/components/fields/editors/LabelEditor";
 
 interface EmailFieldProps {
-  field: FormField;
+  field: EmailFieldType;
 }
 
 const EmailField = React.memo(({ field }: EmailFieldProps) => {
   const { updateField, setSelectedField, isPreview } = useFormBuilder();
-  const selectedSubFieldId = useFormBuilder(
-    (state) => state.selectedSubFieldId
-  );
 
   // Function to handle updates to the label editor content
   const handleUpdateMain = (content: string) => {
     updateField(field.id, { ...field, label: content });
   };
 
-  const handleUpdateSub = (subFieldId: string, htmlContent: string) => {
-    const textContent = htmlToPlain(htmlContent);
-
+  const handleUpdateSub = (content: string) => {
     updateField(field.id, {
-      subFields: field.subFields?.map((sf) =>
-        sf.subId === subFieldId ? { ...sf, content: textContent } : sf
-      ),
+      subField: { ...field.subField, content },
     });
   };
 
@@ -52,7 +43,8 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
         <BaseEditor fieldId={field.id} content={field.label} readOnly />
         <Input
           type="email"
-          placeholder={field.subFields![0].content}
+          variant="email"
+          placeholder={field.subField.content}
           className="mt-2"
         />
       </div>
@@ -62,7 +54,7 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
     <div className="w-full">
       {/* Label area rendered by TipTap */}
       <div className="mb-2">
-        <EmailEditor
+        <LabelEditor
           fieldId={field.id}
           onUpdate={handleUpdateMain}
           content={field.label}
@@ -71,19 +63,12 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
       </div>
       {/* Render the input field */}
       <div>
-        {field.subFields?.map((subField) => (
-          <SubEditor
-            subFieldId={subField.subId}
-            parentFieldId={field.id}
-            onUpdate={(newContent) => {
-              handleUpdateSub(subField.subId, newContent);
-            }}
-            type={subField.type}
-            key={subField.subId}
-            content={subField.content}
-            onClick={(e) => handleSubClick(subField.subId, e)}
-          />
-        ))}
+        <Input
+          type="email"
+          variant="email"
+          value={field.subField.content || ""}
+          onChange={(e) => handleUpdateSub(e.target.value)}
+        />
       </div>
     </div>
   );

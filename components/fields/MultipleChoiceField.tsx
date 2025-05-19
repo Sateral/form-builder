@@ -1,45 +1,34 @@
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { FormField } from '@/lib/types';
-import { useFormBuilder } from '@/lib/store/form-builder-store';
-import TextEditor from './editors/TextEditor';
-import SubEditor from './editors/SubEditor';
-import { PlusCircle } from 'lucide-react';
-import { Button } from '../ui/button';
-
-// Move labels array outside component to prevent recreation
-const OPTION_LABELS = [
-  'A',
-  'B',
-  'C',
-  'D',
-  'E',
-  'F',
-  'G',
-  'H',
-  'I',
-  'J',
-  'K',
-  'L',
-  'M',
-  'N',
-  'O',
-  'P',
-];
+import React, { use, useCallback, useEffect, useMemo } from "react";
+import type {
+  FormField,
+  MultipleChoiceField as MCFieldType,
+} from "@/lib/types";
+import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { PlusCircle } from "lucide-react";
+import { Button } from "../ui/button";
+import BaseEditor from "./editors/BaseEditor";
+import { Input } from "../ui/input";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import OPTION_LABELS from "@/lib/constants/MultipleChoiceOptions";
 
 interface MultipleChoiceFieldProps {
-  field: FormField;
+  field: MCFieldType;
 }
 
 const MultipleChoiceField = React.memo(
   ({ field }: MultipleChoiceFieldProps) => {
-    const { updateField, setSelectedField } = useFormBuilder();
+    const { updateField, isPreview } = useFormBuilder();
     const selectedSubFieldId = useFormBuilder(
       (state) => state.selectedSubFieldId
     );
 
-    // Initialize with options A and B if no subFields exist
+    // Memoize the filtered choice options
+    const choiceOptions = useMemo(() => {
+      return field.subFields?.filter((sub) => sub.type === "choice") || [];
+    }, [field.subFields]);
+
     useEffect(() => {
       if (!field.subFields || field.subFields.length === 0) {
         updateField(field.id, {
@@ -47,16 +36,18 @@ const MultipleChoiceField = React.memo(
             {
               subId: crypto.randomUUID(),
               parentFieldId: field.id,
-              type: 'choice',
-              content: '',
-              label: 'A)',
+              type: "choice",
+              content: "",
+              label: OPTION_LABELS[0].label,
+              colour: OPTION_LABELS[0].colour,
             },
             {
               subId: crypto.randomUUID(),
               parentFieldId: field.id,
-              type: 'choice',
-              content: '',
-              label: 'B)',
+              type: "choice",
+              content: "",
+              label: OPTION_LABELS[1].label,
+              colour: OPTION_LABELS[1].colour,
             },
           ],
         });
@@ -83,31 +74,13 @@ const MultipleChoiceField = React.memo(
       [updateField, field.id, field.subFields]
     );
 
-    // Handle main field click
-    const handleMainClick = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        setSelectedField(field.id);
-      },
-      [setSelectedField, field.id]
-    );
-
-    // Handle option click
-    const handleOptionClick = useCallback(
-      (subFieldId: string, e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-        setSelectedField(field.id, subFieldId);
-      },
-      [setSelectedField, field.id]
-    );
-
     // Add new option
     const addOption = useCallback(() => {
-      const currentOptions =
-        field.subFields?.filter((sub) => sub.type === 'choice') || [];
-      const nextLabelIndex = currentOptions.length % OPTION_LABELS.length;
-      const nextLabel =
-        OPTION_LABELS[nextLabelIndex] || `Option ${currentOptions.length + 1}`;
+      const nextLabelIndex = choiceOptions.length % OPTION_LABELS.length;
+      const nextLabelObj = OPTION_LABELS[nextLabelIndex] || {
+        label: `Option ${choiceOptions.length + 1}`,
+        colour: "#808080",
+      }; // Default grey color
 
       const newSubFieldId = crypto.randomUUID();
 
@@ -117,60 +90,155 @@ const MultipleChoiceField = React.memo(
           {
             subId: newSubFieldId,
             parentFieldId: field.id,
-            type: 'choice',
-            content: '',
-            label: `${nextLabel})`,
+            type: "choice",
+            content: "",
+            label: nextLabelObj.label,
+            colour: nextLabelObj.colour,
           },
         ],
       });
+    }, [field.id, field.subFields, updateField, choiceOptions]);
 
-      // Auto-select the new option after it's created
-      setTimeout(() => {
-        setSelectedField(field.id, newSubFieldId);
-      }, 0);
-    }, [field.id, field.subFields, updateField, setSelectedField]);
+    const removeOption = useCallback(
+      (subFieldIdToRemove: string) => {
+        const currentSubFields = field.subFields || [];
+        const updatedSubFields = currentSubFields.filter(
+          (sub) => sub.subId !== subFieldIdToRemove
+        );
 
+        // Re-label the remaining options
+        const reLabeledSubFields = updatedSubFields.map((sub, index) => {
+          const optionLabel = OPTION_LABELS[index] || {
+            label: `Option ${index + 1}`,
+            colour: "#808080",
+          }; // Default grey color
+
+          return {
+            ...sub,
+            label: optionLabel.label,
+            colour: optionLabel.colour,
+          };
+        });
+
+        updateField(field.id, {
+          subFields: reLabeledSubFields,
+        });
+      },
+      [field.id, field.subFields, updateField]
+    );
+
+    const handleOptionKeyDown = useCallback(
+      (
+        event: React.KeyboardEvent<HTMLInputElement>,
+        option: { subId: string; content?: string; label?: string }
+      ) => {
+        if (
+          event.key === "Backspace" &&
+          (option.content === "" || option.content === undefined) &&
+          option.label !== OPTION_LABELS[0].label // Don't delete option A
+        ) {
+          event.preventDefault();
+          removeOption(option.subId);
+        }
+      },
+      [removeOption]
+    );
 
     // Memoize options rendering
     const optionsElements = useMemo(() => {
-      return (
-        field.subFields?.filter((sub) => sub.type === 'choice') || []
-      ).map((option) => (
+      return choiceOptions.map((option) => (
         <div
           key={option.subId}
-          className={`flex items-center gap-2 ${
-            selectedSubFieldId === option.subId ? 'bg-gray-100 p-1 rounded' : ''
+          className={`flex items-center gap-0 border-2 rounded-md px-[6px] ${
+            selectedSubFieldId === option.subId ? "bg-gray-100 p-1 rounded" : ""
           }`}
         >
-          <div className="font-semibold min-w-[30px]">{option.label}</div>
-          <SubEditor
-            subFieldId={option.subId}
-            parentFieldId={field.id}
-            type="choice"
-            onUpdate={(content) => handleOptionUpdate(option.subId, content)}
-            content={option.content}
-            onClick={(e) => handleOptionClick(option.subId, e)}
+          <div
+            className="flex justify-center items-center font-semibold size-6 text-md shrink-0 rounded-md"
+            style={{
+              backgroundColor: option.colour || "#FFFFFF",
+              color: "#FFFFFF",
+            }}
+          >
+            {option.label}
+          </div>
+          <Input
+            type="text"
+            variant="mc"
+            value={option.content || ""} // Ensure value is always a string
+            onChange={(e) => {
+              handleOptionUpdate(option.subId, e.target.value);
+            }}
+            onKeyDown={(e) =>
+              handleOptionKeyDown(e, {
+                subId: option.subId,
+                content: option.content,
+                label: option.label,
+              })
+            }
           />
         </div>
       ));
     }, [
-      field.subFields,
+      choiceOptions,
       selectedSubFieldId,
-      field.id,
       handleOptionUpdate,
-      handleOptionClick,
+      handleOptionKeyDown,
     ]);
+
+    if (isPreview) {
+      const { fields } = useFormBuilder();
+
+      const mcField = fields.find((f) => f.id === field.id);
+
+      if (!mcField) {
+        return null;
+      }
+
+      const typedField = mcField as MCFieldType;
+
+      return (
+        <div>
+          <BaseEditor
+            fieldId={typedField.id || field.id}
+            content={typedField.label || field.label}
+            readOnly
+            placeholder="Enter question"
+          />
+          <ToggleGroup type="single" className="mt-2 flex flex-col space-y-2">
+            {(typedField.subFields || []).map((item) => (
+              <ToggleGroupItem
+                key={item.subId}
+                value={item.subId}
+                className="flex items-center gap-2 border rounded-md px-3 py-2 data-[state=on]:border-primary"
+              >
+                <div
+                  className="flex justify-center items-center font-semibold size-6 text-md shrink-0 rounded-md"
+                  style={{
+                    backgroundColor: item.colour || "#FFFFFF",
+                    color: "#FFFFFF",
+                  }}
+                >
+                  {item.label}
+                </div>
+                <span>{item.content}</span>
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </div>
+      );
+    }
 
     return (
       <div className="w-full">
         {/* Label editor */}
         <div className="mb-4">
-          <TextEditor
+          <BaseEditor
             fieldId={field.id}
             onUpdate={handleLabelUpdate}
             content={field.label}
             placeholder="Enter question"
-            onClick={handleMainClick}
+            onClick={() => {}}
           />
         </div>
 

@@ -3,16 +3,15 @@
 import React from "react";
 import BaseEditor from "./BaseEditor";
 
-interface TextEditorProps {
+interface LabelEditorProps {
   content?: string;
-  placeholder?: string;
   fieldId: string;
   onUpdate: (content: string) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const TextEditor = React.memo((props: TextEditorProps) => {
-  return <BaseEditor {...props} showToolbar type="text" />;
+const LabelEditor = React.memo((props: LabelEditorProps) => {
+  return <BaseEditor {...props} type="label" />;
 });
 
-export default TextEditor;
+export default LabelEditor;
