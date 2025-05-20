@@ -37,7 +37,7 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
   const baseButtonClasses = useMemo(
     () =>
       cn(
-        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-white hover:bg-gray-300 bg-transparent shadow-none size-7",
+        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-white hover:bg-gray-200 bg-transparent shadow-none size-7",
         isSelected && "opacity-100",
         "transition"
       ),

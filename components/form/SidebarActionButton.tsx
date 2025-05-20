@@ -11,6 +11,12 @@ import { Toggle } from "@/components/ui/toggle";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 /**
  * Props for the SidebarActionButton component
@@ -74,38 +80,40 @@ const SidebarActionButton: React.FC<SidebarActionButtonProps> = ({
   buttonProps,
 }) => {
   return (
-    <HoverCard>
-      <HoverCardTrigger asChild>
-        {isToggle && toggleProps ? (
-          <Toggle
-            size="icon"
-            variant={toggleProps.variant || "sidebar"}
-            pressed={toggleProps.pressed}
-            onPressedChange={toggleProps.onPressedChange}
-            className={cn("shrink-0", className)}
-            aria-label={ariaLabel}
-          >
-            <Icon className="h-4 w-4" />
-          </Toggle>
-        ) : (
-          <Button
-            size="icon"
-            onClick={onClick}
-            className={className}
-            aria-label={ariaLabel}
-            {...buttonProps}
-            {...listeners}
-          >
-            <Icon className="h-4 w-4" />
-          </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {isToggle && toggleProps ? (
+            <Toggle
+              size="icon"
+              variant={toggleProps.variant || "sidebar"}
+              pressed={toggleProps.pressed}
+              onPressedChange={toggleProps.onPressedChange}
+              className={cn("shrink-0", className)}
+              aria-label={ariaLabel}
+            >
+              <Icon className="h-4 w-4" />
+            </Toggle>
+          ) : (
+            <Button
+              size="icon"
+              onClick={onClick}
+              className={className}
+              aria-label={ariaLabel}
+              {...buttonProps}
+              {...listeners}
+            >
+              <Icon className="h-4 w-4" />
+            </Button>
+          )}
+        </TooltipTrigger>
+        {tooltip && (
+          <TooltipContent className="w-fit">
+            <p className="text-xs">{tooltip}</p>
+          </TooltipContent>
         )}
-      </HoverCardTrigger>
-      {tooltip && (
-        <HoverCardContent className="w-fit">
-          <p className="text-xs">{tooltip}</p>
-        </HoverCardContent>
-      )}
-    </HoverCard>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
