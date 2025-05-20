@@ -41,7 +41,7 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
     {
       id: "1",
       type: "text",
-      label: "Full Name",
+      label: "",
       required: true,
       placeholder: "Type something",
       value: "",
@@ -156,7 +156,7 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
         const defaultField: TextField = {
           id: crypto.randomUUID(),
           type: "text",
-          label: "New Field",
+          label: "",
           required: false,
           value: "",
         };

@@ -27,7 +27,7 @@ const TextField = React.memo(({ field }: TextFieldProps) => {
 
   // Editor mode (original code)
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex flex-row gap-2">
       <TextEditor
         fieldId={field.id}
         onUpdate={handleUpdate}

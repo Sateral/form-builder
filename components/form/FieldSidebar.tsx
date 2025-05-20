@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import {
   GripVerticalIcon,
@@ -9,85 +9,102 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { useFormBuilder } from "@/lib/store/form-builder-store";
 import { useCommandMenu } from "@/lib/store/command-menu-store";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
-import { Toggle } from "../ui/toggle";
+import { cn } from "@/lib/utils";
+import SidebarActionButton from "./SidebarActionButton";
 
 interface FieldSidebarProps {
   listeners: SyntheticListenerMap | undefined;
   id: string;
 }
 
-const FieldSidebar = ({ listeners, id }: FieldSidebarProps) => {
+const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
   const selectedField = useFormBuilder((state) => state.selectedField);
-  const { removeField, fields, updateField } = useFormBuilder();
+  const { removeField, updateField } = useFormBuilder();
+  const field = useFormBuilder(
+    useCallback((state) => state.fields.find((field) => field.id === id), [id])
+  );
   const { setIsOpen } = useCommandMenu();
+
+  // Memoize whether this field is selected
+  const isSelected = useMemo(() => selectedField === id, [selectedField, id]);
+
+  // Memoize whether this field is required
+  const isRequired = useMemo(() => field?.required || false, [field]);
+
+  // Common class names for buttons
+  const baseButtonClasses = useMemo(
+    () =>
+      cn(
+        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-white hover:bg-gray-300 bg-transparent shadow-none size-7",
+        isSelected && "opacity-100",
+        "transition"
+      ),
+    [isSelected]
+  );
 
   const handleUpdateField = useCallback(
     (value: boolean) => {
-      console.log(value);
       updateField(id, { required: value });
     },
     [updateField, id]
   );
+
+  const handleAddField = useCallback(() => setIsOpen(true), [setIsOpen]);
+
+  const handleRemoveField = useCallback(
+    () => removeField(id),
+    [removeField, id]
+  );
+
   return (
     <div className="flex flex-row items-center flex-shrink-0 flex-nowrap gap-x-1">
-      <Button
-        size="icon"
-        className={`opacity-0 group-hover:opacity-100 bg-transparent shadow-none hover:bg-gray-300 size-7 ${
-          selectedField === id ? "opacity-100" : ""
-        } transition`}
-        onClick={() => setIsOpen(true)}
-      >
-        <PlusIcon color="grey" />
-      </Button>
+      <SidebarActionButton
+        icon={PlusIcon}
+        onClick={handleAddField}
+        tooltip="Add new field"
+        ariaLabel="Add field"
+        className={cn(baseButtonClasses)}
+      />
 
-      <Button
-        size="icon"
-        className={`opacity-0 group-hover:opacity-100 bg-transparent shadow-none hover:bg-gray-300 size-7 ${
-          selectedField === id ? "opacity-100" : ""
-        } transition`}
-        onClick={() => removeField(id)}
-      >
-        <TrashIcon color="grey" />
-      </Button>
+      <SidebarActionButton
+        icon={TrashIcon}
+        onClick={handleRemoveField}
+        tooltip="Delete this field"
+        ariaLabel="Remove field"
+        className={cn(baseButtonClasses, "hover:bg-destructive/90")}
+        buttonProps={{ variant: "destructive" }}
+      />
 
-      <HoverCard>
-        <HoverCardTrigger>
-          <Toggle
-            size="icon"
-            variant="sidebar"
-            className={`opacity-0 group-hover:opacity-100 bg-transparent shadow-none hover:bg-gray-300 size-7 shrink-0 ${
-              selectedField === id ? "opacity-100" : ""
-            } transition`}
-            // pressed={fields.find(field => field.id === id)?.required || false}
-            onPressedChange={handleUpdateField}
-          >
-            <ShieldAlertIcon />
-          </Toggle>
-        </HoverCardTrigger>
-        <HoverCardContent className="w-fit">
-          <p className="text-xs">Make this field required</p>
-        </HoverCardContent>
-      </HoverCard>
+      <SidebarActionButton
+        icon={ShieldAlertIcon}
+        isToggle
+        toggleProps={{
+          pressed: isRequired,
+          onPressedChange: handleUpdateField,
+          variant: "sidebar",
+        }}
+        tooltip={isRequired ? "Mark as optional" : "Mark as required"}
+        ariaLabel={isRequired ? "Mark as optional" : "Mark as required"}
+        className={cn(
+          baseButtonClasses,
+          `${
+            isRequired ? "bg-blue-200 text-blue-500 hover:bg-blue-200/70" : ""
+          }`
+        )}
+      />
 
-      <Button
-        size="icon"
-        className={`opacity-0 group-hover:opacity-100 bg-transparent shadow-none hover:bg-gray-300 size-7 ${
-          selectedField === id ? "opacity-100" : ""
-        } transition cursor-grab active:cursor-grabbing`}
-        {...listeners}
-      >
-        <GripVerticalIcon color="grey" />
-      </Button>
+      <SidebarActionButton
+        icon={GripVerticalIcon}
+        ariaLabel="Drag to reorder"
+        className={cn(baseButtonClasses, "cursor-grab active:cursor-grabbing")}
+        listeners={listeners}
+      />
     </div>
   );
-};
+});
+
+FieldSidebar.displayName = "FieldSidebar";
 
 export default FieldSidebar;

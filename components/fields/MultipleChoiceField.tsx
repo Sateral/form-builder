@@ -164,7 +164,7 @@ const MultipleChoiceField = React.memo(
     return (
       <div className="w-full">
         {/* Label editor */}
-        <div className="flex flex-row items-center gap-2 mb-4">
+        <div className="flex flex-row gap-2 mb-4">
           <LabelEditor
             fieldId={field.id}
             onUpdate={handleLabelUpdate}

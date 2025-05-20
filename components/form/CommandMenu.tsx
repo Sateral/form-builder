@@ -42,8 +42,8 @@ const CommandMenu = () => {
       case "text":
         addField({
           id: newId,
-          label: "Text",
-          required: true,
+          label: "",
+          required: false,
           type: "text",
         });
         break;
