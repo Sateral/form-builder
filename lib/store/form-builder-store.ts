@@ -43,7 +43,6 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
       type: "text",
       label: "",
       required: true,
-      placeholder: "Type something",
       value: "",
     } as TextField,
   ],

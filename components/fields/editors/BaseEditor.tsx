@@ -51,9 +51,7 @@ const BaseEditor = React.memo(
         attributes: {
           ...editorConfig.editorProps?.attributes,
           // Add specific attributes based on type
-          class: `prose prose-sm focus:outline-none break-all text-wrap w-full ${
-            type === "text" ? "text-editor" : ""
-          }`,
+          class: `prose prose-sm focus:outline-none break-all text-wrap w-full           }`,
         },
       }),
       [editorConfig, type]
