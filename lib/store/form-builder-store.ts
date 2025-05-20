@@ -202,146 +202,64 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
   togglePreview: () => {
     set((state) => ({ isPreview: !state.isPreview }));
   },
-
   selectNextField: () => {
     set((state) => {
       const { fields, selectedField, selectedSubFieldId } = state;
-      if (!selectedField) return {};
 
-      const currentFieldIndex = fields.findIndex((f) => f.id === selectedField);
-      if (currentFieldIndex === -1) return {};
+      // Import the calculation function from the utility file
+      const { calculateNextFocusTarget } = require("@/utils/formNavigation");
 
-      const currentField = fields[currentFieldIndex];
+      // Use the utility function to calculate the next focus target
+      const nextTarget = calculateNextFocusTarget(
+        fields,
+        selectedField,
+        selectedSubFieldId,
+        "down"
+      );
 
-      // Handle subfields if present and a subfield is selected or current field has subfields
+      // If there's no change, return empty object to prevent unnecessary re-renders
       if (
-        currentField.type === "multipleChoice" &&
-        currentField.subFields &&
-        currentField.subFields.length > 0
+        nextTarget.fieldId === selectedField &&
+        nextTarget.subFieldId === selectedSubFieldId
       ) {
-        const mcField = currentField as MultipleChoiceField;
-        if (selectedSubFieldId) {
-          const currentSubFieldIndex = mcField.subFields!.findIndex(
-            (sf) => sf.subId === selectedSubFieldId
-          );
-          if (
-            currentSubFieldIndex !== -1 &&
-            currentSubFieldIndex < mcField.subFields!.length - 1
-          ) {
-            // Select next subfield
-            return {
-              selectedSubFieldId:
-                mcField.subFields![currentSubFieldIndex + 1].subId,
-            };
-          } else {
-            // No more subfields, move to next main field
-            if (currentFieldIndex < fields.length - 1) {
-              const nextField = fields[currentFieldIndex + 1];
-              let nextSubFieldId: string | null = null;
-              if (
-                nextField.type === "multipleChoice" &&
-                nextField.subFields &&
-                nextField.subFields.length > 0
-              ) {
-                nextSubFieldId = (nextField as MultipleChoiceField)
-                  .subFields![0].subId;
-              }
-              return {
-                selectedField: nextField.id,
-                selectedSubFieldId: nextSubFieldId,
-              };
-            }
-            // Already at the last subfield of the last field
-            return {};
-          }
-        } else {
-          // No subfield selected, select the first subfield of the current MC field
-          return { selectedSubFieldId: mcField.subFields![0].subId };
-        }
+        return {};
       }
 
-      // No subfields or not a multiple choice, or no subfield selected in MC that has them
-      // Move to the next main field
-      if (currentFieldIndex < fields.length - 1) {
-        const nextField = fields[currentFieldIndex + 1];
-        let nextSubFieldId: string | null = null;
-        if (
-          nextField.type === "multipleChoice" &&
-          nextField.subFields &&
-          nextField.subFields.length > 0
-        ) {
-          nextSubFieldId = (nextField as MultipleChoiceField).subFields![0]
-            .subId;
-        }
-        return {
-          selectedField: nextField.id,
-          selectedSubFieldId: nextSubFieldId,
-        };
-      }
-
-      // Already at the last field
-      return {};
+      // Return the new selection state
+      return {
+        selectedField: nextTarget.fieldId,
+        selectedSubFieldId: nextTarget.subFieldId,
+      };
     });
   },
-
   selectPreviousField: () => {
     set((state) => {
       const { fields, selectedField, selectedSubFieldId } = state;
-      if (!selectedField) return {};
 
-      const currentFieldIndex = fields.findIndex((f) => f.id === selectedField);
-      if (currentFieldIndex === -1) return {};
+      // Import the calculation function from the utility file
+      const { calculateNextFocusTarget } = require("@/utils/formNavigation");
 
-      const currentField = fields[currentFieldIndex];
+      // Use the utility function to calculate the previous focus target
+      const prevTarget = calculateNextFocusTarget(
+        fields,
+        selectedField,
+        selectedSubFieldId,
+        "up"
+      );
 
-      // Handle subfields if present and a subfield is selected
+      // If there's no change, return empty object to prevent unnecessary re-renders
       if (
-        currentField.type === "multipleChoice" &&
-        currentField.subFields &&
-        currentField.subFields.length > 0 &&
-        selectedSubFieldId
+        prevTarget.fieldId === selectedField &&
+        prevTarget.subFieldId === selectedSubFieldId
       ) {
-        const mcField = currentField as MultipleChoiceField;
-        const currentSubFieldIndex = mcField.subFields!.findIndex(
-          (sf) => sf.subId === selectedSubFieldId
-        );
-
-        if (currentSubFieldIndex > 0) {
-          // Select previous subfield
-          return {
-            selectedSubFieldId:
-              mcField.subFields![currentSubFieldIndex - 1].subId,
-          };
-        } else {
-          // At the first subfield, so "deselect" subfield (move to parent)
-          // Then logic will proceed to previous main field
-          return { selectedSubFieldId: null }; // Effectively selects the main field
-        }
+        return {};
       }
 
-      // No subfield selected OR at the first subfield (subfield selection cleared above)
-      // Move to the previous main field
-      if (currentFieldIndex > 0) {
-        const prevField = fields[currentFieldIndex - 1];
-        let prevSubFieldId: string | null = null;
-        if (
-          prevField.type === "multipleChoice" &&
-          prevField.subFields &&
-          prevField.subFields.length > 0
-        ) {
-          // Select last subfield of the previous field
-          prevSubFieldId = (prevField as MultipleChoiceField).subFields![
-            (prevField as MultipleChoiceField).subFields!.length - 1
-          ].subId;
-        }
-        return {
-          selectedField: prevField.id,
-          selectedSubFieldId: prevSubFieldId,
-        };
-      }
-
-      // Already at the first field (and potentially first subfield or no subfield selected)
-      return {};
+      // Return the new selection state
+      return {
+        selectedField: prevTarget.fieldId,
+        selectedSubFieldId: prevTarget.subFieldId,
+      };
     });
   },
 }));

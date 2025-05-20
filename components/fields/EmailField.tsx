@@ -64,11 +64,14 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
       </div>
       {/* Render the input field */}
       <div>
+        {" "}
         <Input
+          id={`field-${field.id}-sub-${field.subField.subId}`}
           type="email"
           variant="email"
           value={field.subField.content || ""}
           onChange={(e) => handleUpdateSub(e.target.value)}
+          onClick={(e) => handleSubClick(field.subField.subId, e)}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import DnDProvider from "@/providers/DnDProvider";
 import TextField from "@/components/fields/TextField";
@@ -11,16 +11,31 @@ import MultipleChoiceField from "@/components/fields/MultipleChoiceField";
 import { EyeIcon, PencilIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import FormRender from "./FormRender";
+import useFieldNavigation from "@/hooks/useFieldNavigation";
 
 interface Props {}
 
 const FormEditor = ({}: Props) => {
   const fields = useFormBuilder((state) => state.fields);
   const { setSelectedField, togglePreview, isPreview } = useFormBuilder();
+  const { focusSelectedField } = useFieldNavigation();
 
   const handleContainerClick = () => {
     setSelectedField(null, null);
   };
+
+  // Focus the selected field whenever it changes
+  const selectedField = useFormBuilder((state) => state.selectedField);
+  const selectedSubFieldId = useFormBuilder(
+    (state) => state.selectedSubFieldId
+  );
+
+  useEffect(() => {
+    // Focus the selected field when it changes
+    if (selectedField || selectedSubFieldId) {
+      focusSelectedField();
+    }
+  }, [selectedField, selectedSubFieldId, focusSelectedField]);
 
   return (
     <div className="flex flex-col h-full font-medium">

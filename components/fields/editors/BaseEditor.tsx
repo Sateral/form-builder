@@ -16,6 +16,8 @@ export interface BaseEditorProps {
   onUpdate?: (content: string) => void;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   readOnly?: boolean;
+  id?: string;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
 
   // Field-specific props
   placeholder?: string;
@@ -32,6 +34,8 @@ const BaseEditor = React.memo(
     onUpdate,
     onClick,
     readOnly = false,
+    id,
+    onKeyDown,
     showToolbar = false,
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
@@ -80,17 +84,25 @@ const BaseEditor = React.memo(
       }
     }, [editor, isSelected]);
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (onKeyDown) {
+        onKeyDown(e);
+      }
+    };
+
     return (
       <>
+        {" "}
         <EditorContent
           editor={editor}
+          id={`field-${fieldId}`}
           onClick={(e) => {
             if (onClick) {
               onClick(e);
             }
           }}
+          onKeyDown={handleKeyDown}
         />
-
         {/* Only show toolbar for text fields when enabled */}
         {editor && showToolbar && (
           <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>

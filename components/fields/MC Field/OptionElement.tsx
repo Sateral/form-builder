@@ -1,5 +1,7 @@
+"use client";
+
 import { Input } from "@/components/ui/input";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ChoiceOption } from "@/lib/types/base";
 
 interface OptionElementProps {
@@ -14,6 +16,18 @@ interface OptionElementProps {
 
 const OptionElement = React.memo(
   ({ option, isSelected, onUpdate, onKeyDown }: OptionElementProps) => {
+    const editorRef = useRef<HTMLDivElement>(null);
+
+    // Effect to handle focusing when selected programmatically
+    useEffect(() => {
+      // Add this effect to make the element focusable by id
+      if (
+        document.activeElement?.id !== option.subId &&
+        document.getElementById(option.subId) === editorRef.current
+      ) {
+        editorRef.current?.focus();
+      }
+    }, [option.subId]);
     return (
       <div
         key={option.subId}
@@ -29,8 +43,9 @@ const OptionElement = React.memo(
           }}
         >
           {option.label}
-        </div>
+        </div>{" "}
         <Input
+          id={`field-${option.parentFieldId}-sub-${option.subId}`}
           type="text"
           variant="mc"
           value={option.content || ""} // Ensure value is always a string

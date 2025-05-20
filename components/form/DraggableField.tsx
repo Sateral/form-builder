@@ -29,10 +29,9 @@ const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
     transform: CSS.Translate.toString(transform),
     transition,
   };
-
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // setSelectedField(id, null);
+    setSelectedField(id, null);
   };
 
   return (

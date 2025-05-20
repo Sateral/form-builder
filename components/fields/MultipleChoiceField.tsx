@@ -140,7 +140,8 @@ const MultipleChoiceField = React.memo(
         }
       },
       [removeOption]
-    ); // Memoize options rendering
+    );
+
     const optionsElements = useMemo(() => {
       return choiceOptions.map((option) => (
         <OptionElement
