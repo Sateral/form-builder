@@ -1,0 +1,33 @@
+p.is-editor-empty:first-child::before {
+  color: #6e6e6e;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 1;
+  transition: all 0.2s;
+}
+
+/* Hide placeholder only for text fields that aren't focused */
+.text-editor p.is-editor-empty:first-child::before {
+  opacity: 0;
+}
+
+/* Always show placeholder when focused (for all types) */
+.ProseMirror-focused p.is-editor-empty:first-child::before {
+  opacity: 1;
+}
+
+/* Bubble menu */
+.is-active {
+  @apply bg-gray-900;
+  @apply text-white;
+}
+
+.is-active:hover {
+  @apply bg-gray-700;
+}
+
+.prose {
+  @apply text-lg;
+}
