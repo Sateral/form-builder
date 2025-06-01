@@ -1,22 +1,12 @@
 import { useCallback, useMemo } from "react";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import { shallow, useShallow } from "zustand/shallow";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 export function useEditorState(fieldId: string, subFieldId?: string) {
-  // Create a stable selector that doesn't change between renders.
-  // Note: This selector still returns a new object on every call.
-  // Get the selected state with shallow equality.
-  const state = useFormBuilder(
-    useShallow(
-      useCallback(
-        (state) => ({
-          selectedField: state.selectedField,
-          selectedSubFieldId: state.selectedSubFieldId,
-        }),
-        []
-      )
-    )
-  );
+  // Get the selected state directly from the facade
+  const { selectedField, selectedSubFieldId } = useFormBuilderFacade();
+
+  const state = { selectedField, selectedSubFieldId };
 
   // Cache the snapshot so that if state hasn't changed,
   // the same object reference is returned.

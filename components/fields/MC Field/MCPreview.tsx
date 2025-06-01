@@ -1,15 +1,15 @@
 import React from "react";
 import type { MultipleChoiceField } from "@/lib/types";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import BaseEditor from "../editors/BaseEditor";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface MultipleChoiceFieldProps {
   field: MultipleChoiceField;
 }
 
 const PreviewMode = React.memo(({ field }: MultipleChoiceFieldProps) => {
-  const { fields } = useFormBuilder();
+  const { fields } = useFormBuilderFacade();
   const mcField = fields.find((f) => f.id === field.id) as
     | MultipleChoiceField
     | undefined;

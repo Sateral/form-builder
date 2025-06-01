@@ -5,8 +5,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import FieldSidebar from "@/components/form/FieldSidebar";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface DraggableFieldProps {
   id: string;
@@ -15,7 +15,7 @@ interface DraggableFieldProps {
 }
 
 const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
-  const { setSelectedField } = useFormBuilder();
+  const { setSelectedField } = useFormBuilderFacade();
   const {
     attributes,
     listeners,

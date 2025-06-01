@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FormField } from "@/lib/types";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 import TextEditor from "./editors/TextEditor";
 import { Label } from "../ui/label";
 import BaseEditor from "./editors/BaseEditor";
@@ -10,7 +10,7 @@ interface TextFieldProps {
 }
 
 const TextField = React.memo(({ field }: TextFieldProps) => {
-  const { updateField, isPreview } = useFormBuilder();
+  const { updateField, isPreview } = useFormBuilderFacade();
   const [previewValue, setPreviewValue] = useState("");
 
   const handleUpdate = (content: string) => {

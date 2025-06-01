@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import { FormField, MultipleChoiceField, EmailField } from "@/lib/types";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 /**
  * Hook that enables keyboard navigation through form fields and their subfields
@@ -17,7 +17,7 @@ export const useFieldNavigation = () => {
     selectNextField,
     selectPreviousField,
     isPreview,
-  } = useFormBuilder();
+  } = useFormBuilderFacade();
 
   /**
    * Handles keyboard navigation events

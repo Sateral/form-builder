@@ -9,10 +9,10 @@ import {
   ShieldAlertIcon,
 } from "lucide-react";
 
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import { useCommandMenu } from "@/lib/store/command-menu-store";
 import { cn } from "@/lib/utils";
 import SidebarActionButton from "./SidebarActionButton";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface FieldSidebarProps {
   listeners: SyntheticListenerMap | undefined;
@@ -20,18 +20,22 @@ interface FieldSidebarProps {
 }
 
 const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
-  const selectedField = useFormBuilder((state) => state.selectedField);
-  const { removeField, updateField } = useFormBuilder();
-  const field = useFormBuilder(
-    useCallback((state) => state.fields.find((field) => field.id === id), [id])
-  );
+  const { removeField, updateField, selectedField, getField } =
+    useFormBuilderFacade();
+
+  const field = getField(id);
+  if (!field) {
+    console.warn(`Field with id ${id} not found`);
+    return null; // or return a placeholder component
+  }
+
   const { setIsOpen } = useCommandMenu();
 
   // Memoize whether this field is selected
   const isSelected = useMemo(() => selectedField === id, [selectedField, id]);
 
   // Memoize whether this field is required
-  const isRequired = useMemo(() => field?.required || false, [field]);
+  const isRequired = useMemo(() => field.required || false, [field]);
 
   // Common class names for buttons
   const baseButtonClasses = useMemo(

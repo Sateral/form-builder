@@ -6,7 +6,7 @@ import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
 import "@/app/editor.css";
 import { getEditorConfig } from "@/utils/editorConfig";
 import { useEditorState } from "@/hooks/useEditorState";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 import EditorToolbar from "@/components/ui/EditorToolbar";
 
 export interface BaseEditorProps {
@@ -40,7 +40,7 @@ const BaseEditor = React.memo(
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
     const { isSelected } = useEditorState(fieldId);
-    const { isPreview } = useFormBuilder();
+    const { isPreview } = useFormBuilderFacade();
 
     // Get the proper config based on field type
     const editorConfig = getEditorConfig({

@@ -3,15 +3,16 @@ import React from "react";
 import { Input } from "../ui/input";
 import BaseEditor from "./editors/BaseEditor";
 import { EmailField as EmailFieldType } from "@/lib/types";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import LabelEditor from "@/components/fields/editors/LabelEditor";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface EmailFieldProps {
   field: EmailFieldType;
 }
 
 const EmailField = React.memo(({ field }: EmailFieldProps) => {
-  const { updateField, setSelectedField, isPreview } = useFormBuilder();
+  const { updateField, setSelectedField, isPreview, selectedField } =
+    useFormBuilderFacade();
 
   // Function to handle updates to the label editor content
   const handleUpdateMain = (content: string) => {
@@ -27,6 +28,7 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
   const handleMainClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setSelectedField(field.id);
+    console.log(selectedField);
   };
 
   const handleSubClick = (

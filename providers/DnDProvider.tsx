@@ -8,7 +8,7 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface Props {
   children?: React.ReactNode;
@@ -17,7 +17,7 @@ interface Props {
 const DnDProvider = ({ children }: Props) => {
   const [mounted, isMounted] = useState(false);
 
-  const { fields, setFields } = useFormBuilder();
+  const { fields, setFields } = useFormBuilderFacade();
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;

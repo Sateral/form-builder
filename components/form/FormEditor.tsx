@@ -6,29 +6,30 @@ import DnDProvider from "@/providers/DnDProvider";
 import TextField from "@/components/fields/TextField";
 import EmailField from "@/components/fields/EmailField";
 import DraggableField from "@/components/form/DraggableField";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import MultipleChoiceField from "@/components/fields/MultipleChoiceField";
 import { EyeIcon, PencilIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import FormRender from "./FormRender";
 import useFieldNavigation from "@/hooks/useFieldNavigation";
+import { ModeToggle } from "../ThemeToggle";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 interface Props {}
 
 const FormEditor = ({}: Props) => {
-  const fields = useFormBuilder((state) => state.fields);
-  const { setSelectedField, togglePreview, isPreview } = useFormBuilder();
+  const {
+    setSelectedField,
+    selectedField,
+    selectedSubFieldId,
+    togglePreview,
+    isPreview,
+    fields,
+  } = useFormBuilderFacade();
   const { focusSelectedField } = useFieldNavigation();
 
   const handleContainerClick = () => {
     setSelectedField(null, null);
   };
-
-  // Focus the selected field whenever it changes
-  const selectedField = useFormBuilder((state) => state.selectedField);
-  const selectedSubFieldId = useFormBuilder(
-    (state) => state.selectedSubFieldId
-  );
 
   useEffect(() => {
     // Focus the selected field when it changes
@@ -39,7 +40,8 @@ const FormEditor = ({}: Props) => {
 
   return (
     <div className="flex flex-col h-full font-medium">
-      <div className="p-4 border-b flex justify-end">
+      <div className="p-4 border-b flex justify-end items-center gap-2">
+        <ModeToggle />
         <Button
           onClick={() => {
             togglePreview();

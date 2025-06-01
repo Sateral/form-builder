@@ -1,7 +1,7 @@
 import { Extension } from "@tiptap/core";
 import { Plugin, PluginKey } from "prosemirror-state";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import { calculateNextFocusTarget } from "@/utils/formNavigation";
+import { useFormBuilderFacade } from "./store/form-builder-facade";
 
 export const CustomKeyboardExtension = Extension.create({
   name: "customKeyboard",
@@ -21,7 +21,7 @@ export const CustomKeyboardExtension = Extension.create({
               selectedSubFieldId,
               setSelectedField,
               fields,
-            } = useFormBuilder.getState();
+            } = useFormBuilderFacade();
 
             // Handle Enter Key
             if (event.key === "Enter" && !event.shiftKey) {

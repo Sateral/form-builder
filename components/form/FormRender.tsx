@@ -2,14 +2,13 @@
 
 import React from "react";
 
-import { useFormBuilder } from "@/lib/store/form-builder-store";
 import TextField from "../fields/TextField";
 import EmailField from "../fields/EmailField";
 import MultipleChoiceField from "../fields/MultipleChoiceField";
+import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 const FormRender = () => {
-  const fields = useFormBuilder((state) => state.fields);
-
+  const { fields } = useFormBuilderFacade();
   return (
     <div className="flex flex-col space-y-4">
       {fields.map((field) => {
