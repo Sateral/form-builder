@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import React, { useEffect, useRef } from 'react';
-import { ChoiceOption } from '@/lib/types/base';
+import { Input } from "@/components/ui/input";
+import React, { useEffect, useRef } from "react";
+import { ChoiceOption } from "@/lib/types/base";
 
 interface OptionElementProps {
   option: ChoiceOption;
@@ -10,7 +10,7 @@ interface OptionElementProps {
   onUpdate: (id: string, content: string) => void;
   onKeyDown: (
     event: React.KeyboardEvent<HTMLInputElement>,
-    option: Pick<ChoiceOption, 'subId' | 'content' | 'label'>
+    option: Pick<ChoiceOption, "subId" | "content" | "label">
   ) => void;
   onClick: (subId: string, e: React.MouseEvent<HTMLDivElement>) => void;
 }
@@ -27,6 +27,7 @@ const OptionElement = React.memo(
 
     // Effect to handle focusing when selected programmatically
     useEffect(() => {
+      console.log("test");
       if (isSelected && inputRef.current) {
         inputRef.current.focus();
       }
@@ -35,26 +36,24 @@ const OptionElement = React.memo(
     return (
       <div
         key={option.subId}
-        className={`flex items-center gap-0 border-2 rounded-md px-[6px] ${
-          isSelected ? 'bg-gray-100 p-1 rounded' : ''
-        }`}
+        className="flex items-center gap-0 border-2 rounded-md px-[6px]"
         onClick={(e) => onClick(option.subId, e)}
       >
         <div
           className="flex justify-center items-center font-semibold size-6 text-md shrink-0 rounded-md"
           style={{
-            backgroundColor: option.colour || '#FFFFFF',
-            color: '#FFFFFF',
+            backgroundColor: option.colour || "#FFFFFF",
+            color: "#FFFFFF",
           }}
         >
           {option.label}
-        </div>{' '}
+        </div>{" "}
         <Input
           ref={inputRef}
           id={`field-${option.parentFieldId}-sub-${option.subId}`}
           type="text"
           variant="mc"
-          value={option.content || ''} // Ensure value is always a string
+          value={option.content || ""} // Ensure value is always a string
           onChange={(e) => onUpdate(option.subId, e.target.value)}
           onKeyDown={(e) =>
             onKeyDown(e, {
@@ -69,6 +68,6 @@ const OptionElement = React.memo(
   }
 );
 
-OptionElement.displayName = 'OptionElement';
+OptionElement.displayName = "OptionElement";
 
 export default OptionElement;

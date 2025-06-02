@@ -11,8 +11,8 @@ const inputVariants = cva(
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         email:
-          "bg-white shadow-none text-gray-400 rounded-sm border-2 focus-visible:border-blue-300 focus-visible:ring-0 focus-visible:shadow-[0_0_8px_rgba(39,146,245,0.8)]",
-        mc: "bg-white shadow-none text-gray-400 rounded-sm border-none focus-visible:ring-0",
+          "shadow-none text-gray-400 rounded-sm border-2 focus-visible:border-blue-300 focus-visible:ring-0 focus-visible:shadow-[0_0_8px_rgba(39,146,245,0.8)]",
+        mc: "shadow-none text-gray-400 rounded-sm border-none focus-visible:ring-0",
       },
     },
     defaultVariants: {

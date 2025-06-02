@@ -4,7 +4,7 @@ import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
 
 /**
  * Hook that enables keyboard navigation through form fields and their subfields
- * using arrow keys (up/down).
+ * using arrow keys (up/down) and Tab keys (Tab/Shift+Tab).
  *
  * @returns Object with functions to handle keyboard events
  */
@@ -28,35 +28,36 @@ export const useFieldNavigation = () => {
       // Skip navigation in preview mode
       if (isPreview) {
         return;
-      }
-
-      // Only handle arrow keys
-      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") {
+      } // Only handle arrow keys and tab navigation
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Tab") {
         return;
       }
 
-      // Skip if modifier keys are pressed
-      if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
+      // Skip if modifier keys are pressed (except Shift with Tab)
+      if (
+        e.ctrlKey ||
+        e.altKey ||
+        e.metaKey ||
+        (e.shiftKey && e.key !== "Tab")
+      ) {
         return;
       }
 
       // Get the active element
-      const element = document.activeElement;
-
-      // Skip if user is in the middle of typing in a multiline editor
+      const element = document.activeElement; // Skip if user is in the middle of typing in a multiline editor
       if (element instanceof HTMLTextAreaElement) {
         const value = element.value || "";
 
-        // If cursor is not at beginning/end when pressing up/down, let the default behavior work
+        // For arrow keys, check if cursor is at boundaries
+        // For Tab keys, always allow navigation (standard behavior)
         if (e.key === "ArrowDown" && element.selectionStart !== value.length) {
           return;
         }
         if (e.key === "ArrowUp" && element.selectionStart !== 0) {
           return;
         }
-      }
-
-      // Skip if in a content editable div and not at boundaries
+        // Tab keys always navigate (no boundary check needed)
+      } // Skip if in a content editable div and not at boundaries
       if (element instanceof HTMLElement && element.isContentEditable) {
         const selection = window.getSelection();
         if (!selection || !selection.rangeCount) return;
@@ -66,17 +67,17 @@ export const useFieldNavigation = () => {
         const isAtEnd =
           range.endOffset === range.endContainer.textContent?.length;
 
-        // Only navigate if at boundaries
+        // For arrow keys, only navigate if at boundaries
+        // For Tab keys, always allow navigation (standard behavior)
         if (e.key === "ArrowUp" && !isAtStart) return;
         if (e.key === "ArrowDown" && !isAtEnd) return;
-      }
+        // Tab keys always navigate (no boundary check needed)
+      } // Navigate through fields
+      e.preventDefault(); // Prevent default scrolling/tab behavior
 
-      // Navigate through fields
-      e.preventDefault(); // Prevent default scrolling
-
-      if (e.key === "ArrowDown") {
+      if (e.key === "ArrowDown" || (e.key === "Tab" && !e.shiftKey)) {
         selectNextField();
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === "ArrowUp" || (e.key === "Tab" && e.shiftKey)) {
         selectPreviousField();
       }
     },
