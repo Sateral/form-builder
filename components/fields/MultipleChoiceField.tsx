@@ -185,7 +185,7 @@ const MultipleChoiceField = React.memo(
           {field.required && <span className="text-rose-500">*</span>}
         </div>
         {/* Options */}
-        <div className="space-y-2 ml-4">
+        <div className="space-y-2">
           {optionsElements}
 
           <Button

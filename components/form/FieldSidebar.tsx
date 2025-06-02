@@ -41,7 +41,7 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
   const baseButtonClasses = useMemo(
     () =>
       cn(
-        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-white hover:bg-gray-200 bg-transparent shadow-none size-7",
+        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-gray-700 hover:bg-gray-100 bg-transparent shadow-none size-7",
         isSelected && "opacity-100",
         "transition"
       ),
@@ -77,7 +77,10 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
         onClick={handleRemoveField}
         tooltip="Delete this field"
         ariaLabel="Remove field"
-        className={cn(baseButtonClasses, "hover:bg-destructive/90")}
+        className={cn(
+          baseButtonClasses,
+          "hover:bg-destructive/90 hover:text-red-700 dark:hover:text-white"
+        )}
         buttonProps={{ variant: "destructive" }}
       />
 
