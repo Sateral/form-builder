@@ -1,16 +1,10 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo } from 'react';
-import type {
-  FormField,
-  MultipleChoiceField as MCFieldType,
-} from '@/lib/types';
+import type { MultipleChoiceField as MCFieldType } from '@/lib/types';
 import { useFormBuilder } from '@/lib/store/form-builder-store';
 import { PlusCircle } from 'lucide-react';
 import { Button } from '../ui/button';
-import BaseEditor from './editors/BaseEditor';
-import { Input } from '../ui/input';
-import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
 import OPTION_LABELS from '@/lib/constants/MultipleChoiceOptions';
 import PreviewMode from './MC Field/MCPreview';
 import OptionElement from './MC Field/OptionElement';

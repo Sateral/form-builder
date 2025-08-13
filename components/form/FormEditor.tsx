@@ -1,21 +1,19 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import DnDProvider from "@/providers/DnDProvider";
-import TextField from "@/components/fields/TextField";
-import EmailField from "@/components/fields/EmailField";
-import DraggableField from "@/components/form/DraggableField";
-import { useFormBuilder } from "@/lib/store/form-builder-store";
-import MultipleChoiceField from "@/components/fields/MultipleChoiceField";
-import { EyeIcon, PencilIcon } from "lucide-react";
-import { Button } from "../ui/button";
-import FormRender from "./FormRender";
-import useFieldNavigation from "@/hooks/useFieldNavigation";
+import DnDProvider from '@/providers/DnDProvider';
+import TextField from '@/components/fields/TextField';
+import EmailField from '@/components/fields/EmailField';
+import DraggableField from '@/components/form/DraggableField';
+import { useFormBuilder } from '@/lib/store/form-builder-store';
+import MultipleChoiceField from '@/components/fields/MultipleChoiceField';
+import { EyeIcon, PencilIcon } from 'lucide-react';
+import { Button } from '../ui/button';
+import FormRender from './FormRender';
+import useFieldNavigation from '@/hooks/useFieldNavigation';
 
-interface Props {}
-
-const FormEditor = ({}: Props) => {
+const FormEditor = () => {
   const fields = useFormBuilder((state) => state.fields);
   const { setSelectedField, togglePreview, isPreview } = useFormBuilder();
   const { focusSelectedField } = useFieldNavigation();
@@ -73,11 +71,11 @@ const FormEditor = ({}: Props) => {
                   <div className="flex flex-row items-center gap-2">
                     {(() => {
                       switch (field.type) {
-                        case "text":
+                        case 'text':
                           return <TextField field={field} />;
-                        case "email":
+                        case 'email':
                           return <EmailField field={field} />;
-                        case "multipleChoice":
+                        case 'multipleChoice':
                           return <MultipleChoiceField field={field} />;
                         default:
                           return null;

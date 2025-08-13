@@ -1,13 +1,14 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 import {
   FormField,
-  FormFieldTypes,
   TextField,
   EmailField,
   MultipleChoiceField,
   FormSubField,
   BaseField,
-} from "@/lib/types";
+} from '@/lib/types';
+
+import { calculateNextFocusTarget } from '@/utils/formNavigation';
 
 interface FormBuilderState {
   fields: FormField[];
@@ -26,27 +27,27 @@ interface FormBuilderState {
 
 const createDefaultMCSubField = (
   parentFieldId: string,
-  label: string = "Option",
+  label: string = 'Option',
   colour: string
-): FormSubField & { type: "choice"; label: string; colour: string } => ({
+): FormSubField & { type: 'choice'; label: string; colour: string } => ({
   subId: crypto.randomUUID(),
   parentFieldId,
-  type: "choice",
+  type: 'choice',
   label,
   colour,
 });
 
-export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
+export const useFormBuilder = create<FormBuilderState>()((set) => ({
   fields: [
     {
-      id: "1",
-      type: "text",
-      label: "",
+      id: '1',
+      type: 'text',
+      label: '',
       required: true,
-      value: "",
+      value: '',
     } as TextField,
   ],
-  selectedField: "1",
+  selectedField: '1',
   selectedSubFieldId: null,
   isPreview: false,
 
@@ -56,43 +57,43 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
 
     const baseData: BaseField = {
       id: newId,
-      label: "",
+      label: '',
       required: false,
-      placeholder: "Type something",
+      placeholder: 'Type something',
     };
 
     switch (fieldData.type) {
-      case "text":
+      case 'text':
         newCompleteField = {
           ...baseData,
           ...(fieldData as Partial<TextField>),
-          type: "text",
-          value: (fieldData as Partial<TextField>).value || "",
+          type: 'text',
+          value: (fieldData as Partial<TextField>).value || '',
         };
         break;
 
-      case "email":
+      case 'email':
         newCompleteField = {
           ...baseData,
           ...(fieldData as Partial<EmailField>),
-          type: "email",
+          type: 'email',
           subField: (fieldData as Partial<EmailField>).subField || {
             parentFieldId: newId,
             subId: crypto.randomUUID(),
-            type: "input",
-            content: "",
+            type: 'input',
+            content: '',
           },
         };
         break;
 
-      case "multipleChoice":
+      case 'multipleChoice':
         newCompleteField = {
           ...baseData,
           ...(fieldData as Partial<MultipleChoiceField>),
-          type: "multipleChoice",
+          type: 'multipleChoice',
           subFields: [
-            createDefaultMCSubField(newId, "A", "#FF69B4"),
-            createDefaultMCSubField(newId, "B", "#00CED1"),
+            createDefaultMCSubField(newId, 'A', '#FF69B4'),
+            createDefaultMCSubField(newId, 'B', '#00CED1'),
           ],
         };
         break;
@@ -154,10 +155,10 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
       if (newFields.length === 0) {
         const defaultField: TextField = {
           id: crypto.randomUUID(),
-          type: "text",
-          label: "",
+          type: 'text',
+          label: '',
           required: false,
-          value: "",
+          value: '',
         };
         return {
           fields: [defaultField],
@@ -182,8 +183,8 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
 
       if (newSelectedFieldInstance) {
         const hasSubFieldsProperty =
-          "subFields" in newSelectedFieldInstance ||
-          "options" in newSelectedFieldInstance;
+          'subFields' in newSelectedFieldInstance ||
+          'options' in newSelectedFieldInstance;
         if (!hasSubFieldsProperty) {
           newSelectedSubFieldId = null;
         }
@@ -206,15 +207,12 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
     set((state) => {
       const { fields, selectedField, selectedSubFieldId } = state;
 
-      // Import the calculation function from the utility file
-      const { calculateNextFocusTarget } = require("@/utils/formNavigation");
-
       // Use the utility function to calculate the next focus target
       const nextTarget = calculateNextFocusTarget(
         fields,
         selectedField,
         selectedSubFieldId,
-        "down"
+        'down'
       );
 
       // If there's no change, return empty object to prevent unnecessary re-renders
@@ -236,15 +234,12 @@ export const useFormBuilder = create<FormBuilderState>()((set, get) => ({
     set((state) => {
       const { fields, selectedField, selectedSubFieldId } = state;
 
-      // Import the calculation function from the utility file
-      const { calculateNextFocusTarget } = require("@/utils/formNavigation");
-
       // Use the utility function to calculate the previous focus target
       const prevTarget = calculateNextFocusTarget(
         fields,
         selectedField,
         selectedSubFieldId,
-        "up"
+        'up'
       );
 
       // If there's no change, return empty object to prevent unnecessary re-renders

@@ -1,22 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Button } from "@/components/ui/button";
-import { Toggle } from "@/components/ui/toggle";
-import { cn } from "@/lib/utils";
-import { LucideIcon } from "lucide-react";
-import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import React from 'react';
+
+import { Button } from '@/components/ui/button';
+import { Toggle } from '@/components/ui/toggle';
+import { cn } from '@/lib/utils';
+import { LucideIcon } from 'lucide-react';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
+} from '../ui/tooltip';
 
 /**
  * Props for the SidebarActionButton component
@@ -55,11 +51,11 @@ interface SidebarActionButtonProps {
     onPressedChange: (pressed: boolean) => void;
 
     /** Visual variant of the toggle */
-    variant?: "default" | "outline" | "sidebar";
+    variant?: 'default' | 'outline' | 'sidebar';
   };
 
   /** Button-specific props, only used when isToggle is false */
-  buttonProps?: Omit<React.ComponentPropsWithoutRef<typeof Button>, "onClick">;
+  buttonProps?: Omit<React.ComponentPropsWithoutRef<typeof Button>, 'onClick'>;
 }
 
 /**
@@ -86,10 +82,10 @@ const SidebarActionButton: React.FC<SidebarActionButtonProps> = ({
           {isToggle && toggleProps ? (
             <Toggle
               size="icon"
-              variant={toggleProps.variant || "sidebar"}
+              variant={toggleProps.variant || 'sidebar'}
               pressed={toggleProps.pressed}
               onPressedChange={toggleProps.onPressedChange}
-              className={cn("shrink-0", className)}
+              className={cn('shrink-0', className)}
               aria-label={ariaLabel}
             >
               <Icon className="h-4 w-4" />

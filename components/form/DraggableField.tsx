@@ -1,12 +1,11 @@
-"use client";
+'use client';
 
-import React from "react";
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
-import { useSortable } from "@dnd-kit/sortable";
+import React from 'react';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 
-import { useFormBuilder } from "@/lib/store/form-builder-store";
-import FieldSidebar from "@/components/form/FieldSidebar";
+import { useFormBuilder } from '@/lib/store/form-builder-store';
+import FieldSidebar from '@/components/form/FieldSidebar';
 
 interface DraggableFieldProps {
   id: string;
@@ -40,7 +39,7 @@ const DraggableField = ({ id, children, className }: DraggableFieldProps) => {
       style={style}
       {...attributes}
       className={`w-full p-2 group transition-colors duration-300 rounded-md ${className} ${
-        isDragging ? "z-50" : ""
+        isDragging ? 'z-50' : ''
       }`}
       onClick={handleClick}
     >
