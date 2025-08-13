@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import BaseEditor from "./BaseEditor";
+import React from 'react';
+import BaseEditor from './BaseEditor';
 
 interface LabelEditorProps {
   content?: string;
@@ -13,5 +13,7 @@ interface LabelEditorProps {
 const LabelEditor = React.memo((props: LabelEditorProps) => {
   return <BaseEditor {...props} type="label" />;
 });
+
+LabelEditor.displayName = 'LabelEditor';
 
 export default LabelEditor;

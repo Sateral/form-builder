@@ -1,20 +1,14 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useMemo } from "react";
-import type {
-  FormField,
-  MultipleChoiceField as MCFieldType,
-} from "@/lib/types";
-import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
-import { PlusCircle } from "lucide-react";
-import { Button } from "../ui/button";
-import BaseEditor from "./editors/BaseEditor";
-import { Input } from "../ui/input";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import OPTION_LABELS from "@/lib/constants/MultipleChoiceOptions";
-import PreviewMode from "./MC Field/MCPreview";
-import OptionElement from "./MC Field/OptionElement";
-import LabelEditor from "./editors/LabelEditor";
+import React, { useCallback, useEffect, useMemo } from 'react';
+import type { MultipleChoiceField as MCFieldType } from '@/lib/types';
+import { useFormBuilderFacade } from '@/lib/store/form-builder-facade';
+import { PlusCircle } from 'lucide-react';
+import { Button } from '../ui/button';
+import OPTION_LABELS from '@/lib/constants/MultipleChoiceOptions';
+import PreviewMode from './MC Field/MCPreview';
+import OptionElement from './MC Field/OptionElement';
+import LabelEditor from './editors/LabelEditor';
 
 interface MultipleChoiceFieldProps {
   field: MCFieldType;
@@ -23,7 +17,7 @@ interface MultipleChoiceFieldProps {
 type ChoiceOption = {
   subId: string;
   parentFieldId: string;
-  type: "choice";
+  type: 'choice';
   content: string;
   label: string;
   colour: string;
@@ -36,8 +30,8 @@ const createChoiceOption = (
 ): ChoiceOption => ({
   subId: crypto.randomUUID(),
   parentFieldId,
-  type: "choice",
-  content: "",
+  type: 'choice',
+  content: '',
   label: labelObj.label,
   colour: labelObj.colour,
 });
@@ -48,7 +42,7 @@ const MultipleChoiceField = React.memo(
       useFormBuilderFacade();
 
     const choiceOptions = useMemo(() => {
-      return field.subFields?.filter((sub) => sub.type === "choice") || [];
+      return field.subFields?.filter((sub) => sub.type === 'choice') || [];
     }, [field.subFields]); // Initialize with default options if none exist
     useEffect(() => {
       if (!field.subFields || field.subFields.length === 0) {
@@ -84,7 +78,7 @@ const MultipleChoiceField = React.memo(
       const nextLabelIndex = choiceOptions.length % OPTION_LABELS.length;
       const nextLabelObj = OPTION_LABELS[nextLabelIndex] || {
         label: `Option ${choiceOptions.length + 1}`,
-        colour: "#808080",
+        colour: '#808080',
       };
 
       updateField(field.id, {
@@ -105,7 +99,7 @@ const MultipleChoiceField = React.memo(
         const reLabeledSubFields = updatedSubFields.map((sub, index) => {
           const optionLabel = OPTION_LABELS[index] || {
             label: `Option ${index + 1}`,
-            colour: "#808080",
+            colour: '#808080',
           };
 
           return {
@@ -128,8 +122,8 @@ const MultipleChoiceField = React.memo(
         option: { subId: string; content?: string; label?: string }
       ) => {
         if (
-          event.key === "Backspace" &&
-          (option.content === "" || option.content === undefined) &&
+          event.key === 'Backspace' &&
+          (option.content === '' || option.content === undefined) &&
           option.label !== OPTION_LABELS[0].label // Don't delete option A
         ) {
           event.preventDefault();
@@ -170,7 +164,7 @@ const MultipleChoiceField = React.memo(
 
     return (
       <div className="w-full">
-        {" "}
+        {' '}
         {/* Label editor */}
         <div className="flex flex-row gap-2 mb-4">
           <LabelEditor
@@ -202,6 +196,6 @@ const MultipleChoiceField = React.memo(
   }
 );
 
-MultipleChoiceField.displayName = "MultipleChoiceField";
+MultipleChoiceField.displayName = 'MultipleChoiceField';
 
 export default MultipleChoiceField;
