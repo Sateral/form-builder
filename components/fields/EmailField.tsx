@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { Input } from "../ui/input";
-import BaseEditor from "./editors/BaseEditor";
-import { EmailField as EmailFieldType } from "@/lib/types";
-import LabelEditor from "@/components/fields/editors/LabelEditor";
-import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
+import { Input } from '../ui/input';
+import BaseEditor from './editors/BaseEditor';
+import { EmailField as EmailFieldType } from '@/lib/types';
+import LabelEditor from '@/components/fields/editors/LabelEditor';
+import { useFormBuilderFacade } from '@/lib/store/form-builder-facade';
 
 interface EmailFieldProps {
   field: EmailFieldType;
@@ -66,12 +66,12 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
       </div>
       {/* Render the input field */}
       <div>
-        {" "}
+        {' '}
         <Input
           id={`field-${field.id}-sub-${field.subField.subId}`}
           type="email"
           variant="email"
-          value={field.subField.content || ""}
+          value={field.subField.content || ''}
           onChange={(e) => handleUpdateSub(e.target.value)}
           onClick={(e) => handleSubClick(field.subField.subId, e)}
         />
@@ -79,5 +79,7 @@ const EmailField = React.memo(({ field }: EmailFieldProps) => {
     </div>
   );
 });
+
+EmailField.displayName = 'EmailField';
 
 export default EmailField;

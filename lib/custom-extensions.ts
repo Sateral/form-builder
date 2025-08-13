@@ -1,77 +1,80 @@
-import { Extension } from "@tiptap/core";
-import { Plugin, PluginKey } from "prosemirror-state";
-import { calculateNextFocusTarget } from "@/utils/formNavigation";
-import { useFormBuilderFacade } from "./store/form-builder-facade";
+/////////////// OLD FILE
 
-export const CustomKeyboardExtension = Extension.create({
-  name: "customKeyboard",
+// import { Extension } from '@tiptap/core';
+// import { Plugin, PluginKey } from 'prosemirror-state';
+// import { calculateNextFocusTarget } from '@/utils/formNavigation';
+// import { useFormBuilderFacade } from './store/form-builder-facade';
 
-  addProseMirrorPlugins() {
-    const fieldId = this.options.fieldId;
+// export const CustomKeyboardExtension = Extension.create({
+//   name: 'customKeyboard',
 
-    return [
-      new Plugin({
-        key: new PluginKey("customKeyboard"),
-        priority: 150,
-        props: {
-          handleKeyDown: (view, event) => {
-            const {
-              addField,
-              removeField,
-              selectedSubFieldId,
-              setSelectedField,
-              fields,
-            } = useFormBuilderFacade();
+//   addProseMirrorPlugins() {
+//     const fieldId = this.options.fieldId;
 
-            // Handle Enter Key
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              addField({
-                type: "text",
-                label: "New Field",
-                required: false,
-                placeholder: "Type something...",
-              });
-              return true;
-            }
+//     return [
+//       new Plugin({
+//         key: new PluginKey('customKeyboard'),
+//         priority: 150,
+//         props: {
+//           handleKeyDown: (view, event) => {
+//             const {
+//               addField,
+//               removeField,
+//               selectedSubFieldId,
+//               setSelectedField,
+//               fields,
+//             } = useFormBuilderFacade();
 
-            // Handle Backspace Key
-            if (event.key === "Backspace" && !view.state.doc.textContent) {
-              event.preventDefault();
+//             // Handle Enter Key
+//             if (event.key === 'Enter' && !event.shiftKey) {
+//               event.preventDefault();
+//               addField({
+//                 id: crypto.randomUUID(),
+//                 type: 'text',
+//                 label: 'New Field',
+//                 required: false,
+//                 placeholder: 'Type something...',
+//               });
+//               return true;
+//             }
 
-              // Find current field index
-              const fieldIndex = fields.findIndex((f) => f.id === fieldId);
-              if (fieldIndex > 0) {
-                setSelectedField(fields[fieldIndex - 1].id, null);
-              }
+//             // Handle Backspace Key
+//             if (event.key === 'Backspace' && !view.state.doc.textContent) {
+//               event.preventDefault();
 
-              removeField(fieldId);
-              return true;
-            }
+//               // Find current field index
+//               const fieldIndex = fields.findIndex((f) => f.id === fieldId);
+//               if (fieldIndex > 0) {
+//                 setSelectedField(fields[fieldIndex - 1].id, null);
+//               }
 
-            // Handle Arrow Keys
-            if (event.key === "ArrowUp") {
-              return calculateNextFocusTarget(
-                view,
-                "up",
-                fieldId,
-                selectedSubFieldId
-              );
-            }
+//               removeField(fieldId);
+//               return true;
+//             }
 
-            if (event.key === "ArrowDown") {
-              return navigateFormFields(
-                view,
-                "down",
-                fieldId,
-                selectedSubFieldId
-              );
-            }
+//             // Handle Arrow Keys
+//             if (event.key === 'ArrowUp') {
+//               return calculateNextFocusTarget(
+//                 view,
+//                 'up',
+//                 fieldId,
+//                 selectedSubFieldId
+//               );
+//             }
 
-            return false;
-          },
-        },
-      }),
-    ];
-  },
-});
+//             if (event.key === 'ArrowDown') {
+//               return navigateFormFields(
+//                 view,
+//                 'down',
+//                 fieldId,
+//                 selectedSubFieldId
+//               );
+//             }
+
+//             return false;
+//           },
+//         },
+//       }),
+//     ];
+//   },
+// });

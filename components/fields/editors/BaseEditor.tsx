@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { EditorContent, useEditor, BubbleMenu } from "@tiptap/react";
+import React, { useEffect } from 'react';
+import { EditorContent, useEditor, BubbleMenu } from '@tiptap/react';
 
-import "@/app/editor.css";
-import { getEditorConfig } from "@/utils/editorConfig";
-import { useEditorState } from "@/hooks/useEditorState";
-import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
-import EditorToolbar from "@/components/ui/EditorToolbar";
+import '@/app/editor.css';
+import { getEditorConfig } from '@/utils/editorConfig';
+import { useEditorState } from '@/hooks/useEditorState';
+import EditorToolbar from '@/components/ui/EditorToolbar';
 
 export interface BaseEditorProps {
   // Common props
@@ -21,7 +20,7 @@ export interface BaseEditorProps {
 
   // Field-specific props
   placeholder?: string;
-  type?: "text" | "label";
+  type?: 'text' | 'label';
   showToolbar?: boolean;
 }
 
@@ -30,17 +29,14 @@ const BaseEditor = React.memo(
     content,
     fieldId,
     placeholder,
-    type = "text",
     onUpdate,
     onClick,
     readOnly = false,
-    id,
     onKeyDown,
     showToolbar = false,
   }: BaseEditorProps) => {
     // Select appropriate state based on whether this is a subfield
     const { isSelected } = useEditorState(fieldId);
-    const { isPreview } = useFormBuilderFacade();
 
     // Get the proper config based on field type
     const editorConfig = getEditorConfig({
@@ -58,7 +54,7 @@ const BaseEditor = React.memo(
           class: `prose prose-sm focus:outline-none break-all text-wrap w-full           }`,
         },
       }),
-      [editorConfig, type]
+      [editorConfig]
     );
 
     const editor = useEditor(
@@ -92,7 +88,7 @@ const BaseEditor = React.memo(
 
     return (
       <>
-        {" "}
+        {' '}
         <EditorContent
           editor={editor}
           id={`field-${fieldId}`}
@@ -113,5 +109,7 @@ const BaseEditor = React.memo(
     );
   }
 );
+
+BaseEditor.displayName = 'BaseEditor';
 
 export default BaseEditor;

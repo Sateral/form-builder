@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useCallback, useMemo } from "react";
-import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import React, { useCallback, useMemo } from 'react';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import {
   GripVerticalIcon,
   PlusIcon,
   TrashIcon,
   ShieldAlertIcon,
-} from "lucide-react";
+} from 'lucide-react';
 
-import { useCommandMenu } from "@/lib/store/command-menu-store";
-import { cn } from "@/lib/utils";
-import SidebarActionButton from "./SidebarActionButton";
-import { useFormBuilderFacade } from "@/lib/store/form-builder-facade";
+import { useCommandMenu } from '@/lib/store/command-menu-store';
+import { cn } from '@/lib/utils';
+import SidebarActionButton from './SidebarActionButton';
+import { useFormBuilderFacade } from '@/lib/store/form-builder-facade';
 
 interface FieldSidebarProps {
   listeners: SyntheticListenerMap | undefined;
@@ -24,10 +24,6 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
     useFormBuilderFacade();
 
   const field = getField(id);
-  if (!field) {
-    console.warn(`Field with id ${id} not found`);
-    return null; // or return a placeholder component
-  }
 
   const { setIsOpen } = useCommandMenu();
 
@@ -35,15 +31,15 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
   const isSelected = useMemo(() => selectedField === id, [selectedField, id]);
 
   // Memoize whether this field is required
-  const isRequired = useMemo(() => field.required || false, [field]);
+  const isRequired = useMemo(() => field?.required || false, [field]);
 
   // Common class names for buttons
   const baseButtonClasses = useMemo(
     () =>
       cn(
-        "opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-gray-700 hover:bg-gray-100 bg-transparent shadow-none size-7",
-        isSelected && "opacity-100",
-        "transition"
+        'opacity-0 group-hover:opacity-100 text-gray-500/70 hover:text-gray-700 hover:bg-gray-100 bg-transparent shadow-none size-7',
+        isSelected && 'opacity-100',
+        'transition'
       ),
     [isSelected]
   );
@@ -62,6 +58,11 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
     [removeField, id]
   );
 
+  if (!field) {
+    console.warn(`Field with id ${id} not found`);
+    return null; // or return a placeholder component
+  }
+
   return (
     <div className="flex flex-row items-center flex-shrink-0 flex-nowrap gap-x-1">
       <SidebarActionButton
@@ -79,9 +80,9 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
         ariaLabel="Remove field"
         className={cn(
           baseButtonClasses,
-          "hover:bg-destructive/90 hover:text-red-700 dark:hover:text-white"
+          'hover:bg-destructive/90 hover:text-red-700 dark:hover:text-white'
         )}
-        buttonProps={{ variant: "destructive" }}
+        buttonProps={{ variant: 'destructive' }}
       />
 
       <SidebarActionButton
@@ -90,14 +91,14 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
         toggleProps={{
           pressed: isRequired,
           onPressedChange: handleUpdateField,
-          variant: "sidebar",
+          variant: 'sidebar',
         }}
-        tooltip={isRequired ? "Mark as optional" : "Mark as required"}
-        ariaLabel={isRequired ? "Mark as optional" : "Mark as required"}
+        tooltip={isRequired ? 'Mark as optional' : 'Mark as required'}
+        ariaLabel={isRequired ? 'Mark as optional' : 'Mark as required'}
         className={cn(
           baseButtonClasses,
           `${
-            isRequired ? "bg-blue-200 text-blue-500 hover:bg-blue-200/70" : ""
+            isRequired ? 'bg-blue-200 text-blue-500 hover:bg-blue-200/70' : ''
           }`
         )}
       />
@@ -105,13 +106,13 @@ const FieldSidebar = React.memo(({ listeners, id }: FieldSidebarProps) => {
       <SidebarActionButton
         icon={GripVerticalIcon}
         ariaLabel="Drag to reorder"
-        className={cn(baseButtonClasses, "cursor-grab active:cursor-grabbing")}
+        className={cn(baseButtonClasses, 'cursor-grab active:cursor-grabbing')}
         listeners={listeners}
       />
     </div>
   );
 });
 
-FieldSidebar.displayName = "FieldSidebar";
+FieldSidebar.displayName = 'FieldSidebar';
 
 export default FieldSidebar;
