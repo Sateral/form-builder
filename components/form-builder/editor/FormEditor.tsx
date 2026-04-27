@@ -1,6 +1,7 @@
 "use client";
 
-import { EyeIcon, PencilIcon, SparklesIcon } from "lucide-react";
+import Link from "next/link";
+import { EyeIcon, PencilIcon } from "lucide-react";
 
 import { EditorCanvas } from "@/components/form-builder/editor/EditorCanvas";
 import { useFormEditor } from "@/components/form-builder/editor/useFormEditor";
@@ -14,14 +15,17 @@ export function FormEditor() {
     <div className="min-h-screen bg-[#fbfcfe] text-slate-950">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur">
         <div className="mx-auto flex h-[60px] max-w-7xl items-center justify-between px-6">
-          <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-950 text-white">
-              <SparklesIcon className="h-4 w-4" />
+          <Link
+            className="flex items-center gap-2 rounded-md outline-none transition hover:opacity-90 focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2"
+            href="/"
+          >
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-950 text-sm font-bold text-white">
+              N
             </span>
             <span className="text-sm font-semibold tracking-[-0.01em]">
-              Noto Forms
+              Noto
             </span>
-          </div>
+          </Link>
 
           <button
             className="inline-flex h-9 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
